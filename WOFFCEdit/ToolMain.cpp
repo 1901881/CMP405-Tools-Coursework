@@ -18,6 +18,8 @@ ToolMain::ToolMain()
 	m_toolInputCommands.back		= false;
 	m_toolInputCommands.left		= false;
 	m_toolInputCommands.right		= false;
+	m_toolInputCommands.up			= false;
+	m_toolInputCommands.down		= false;
 	
 }
 
@@ -338,7 +340,7 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.right = false;
 	//rotation
-	if (m_keyArray['E'])
+	/*if (m_keyArray['E'])
 	{
 		m_toolInputCommands.rotRight = true;
 	}
@@ -347,7 +349,46 @@ void ToolMain::UpdateInput(MSG * msg)
 	{
 		m_toolInputCommands.rotLeft = true;
 	}
-	else m_toolInputCommands.rotLeft = false;
+	else m_toolInputCommands.rotLeft = false;*/
 
-	//WASD
+	//Movement Up and Down
+	if (m_keyArray['E'])
+	{
+		m_toolInputCommands.up = true;
+	}
+	else m_toolInputCommands.up = false;
+
+	if (m_keyArray['Q'])
+	{
+		m_toolInputCommands.down = true;
+	}
+	else m_toolInputCommands.down = false;
+
+	//Camera Rotation
+	
+	//left arrow - 37
+	//up arrow - 38
+	//right arrow - 39
+	//down arrow - 40
+
+	if (m_keyArray[38])
+	{
+		m_toolInputCommands.rotUp = true;
+	}
+	else m_toolInputCommands.rotUp = false;
+	if (m_keyArray[40])
+	{
+		m_toolInputCommands.rotDown = true;
+	}
+	else m_toolInputCommands.rotDown = false;
+	if (m_keyArray[39])
+	{
+		m_toolInputCommands.rotRight = true;
+	}
+	else m_toolInputCommands.rotRight = false;
+	if (m_keyArray[37])
+	{
+		m_toolInputCommands.rotLeft = true;
+	}
+	else m_toolInputCommands.rotLeft = false;
 }
