@@ -49,10 +49,6 @@ Game::Game()
 	m_camRight.y = 0.0f;
 	m_camRight.z = 0.0f;
 
-	m_camUp.x = 0.0f;
-	m_camUp.y = 0.0f;
-	m_camUp.z = 0.0f;
-
 	m_camOrientation.x = 0.0f;
 	m_camOrientation.y = 0.0f;
 	m_camOrientation.z = 0.0f;
@@ -175,9 +171,6 @@ void Game::Update(DX::StepTimer const& timer)
 	//create right vector from look Direction
 	m_camLookDirection.Cross(Vector3::UnitY, m_camRight);
 
-	//create right vector from look Direction
-	m_camLookDirection.Cross(Vector3::UnitX, m_camUp);
-
 	//process input and update stuff
 	if (m_InputCommands.forward)
 	{	
@@ -198,11 +191,11 @@ void Game::Update(DX::StepTimer const& timer)
 
 	if (m_InputCommands.up)
 	{
-		m_camPosition += m_camUp * m_movespeed;
+		m_camPosition.y += m_movespeed;
 	}
 	if (m_InputCommands.down)
 	{
-		m_camPosition -= m_camUp * m_movespeed;
+		m_camPosition.y -= m_movespeed;
 	}
 
 	//update lookat point
