@@ -20,6 +20,10 @@ ToolMain::ToolMain()
 	m_toolInputCommands.right		= false;
 	m_toolInputCommands.up			= false;
 	m_toolInputCommands.down		= false;
+
+	m_toolInputCommands.mouse_X		= 0;
+	m_toolInputCommands.mouse_Y		= 0;
+	m_toolInputCommands.mouse_LB_Down	= false;
 	
 }
 
@@ -291,6 +295,14 @@ void ToolMain::Tick(MSG *msg)
 
 	//Renderer Update Call
 	m_d3dRenderer.Tick(&m_toolInputCommands);
+
+	//lab6
+	if (m_toolInputCommands.mouse_LB_Down)
+	{
+		m_selectedObject = m_d3dRenderer.MousePicking();
+		m_toolInputCommands.mouse_LB_Down = false;
+	}
+
 }
 
 void ToolMain::UpdateInput(MSG * msg)
@@ -308,11 +320,17 @@ void ToolMain::UpdateInput(MSG * msg)
 		break;
 
 	case WM_MOUSEMOVE:
+		//update the mouse X and Y which will be sent thru to the Renderer.
+		m_toolInputCommands.mouse_X = GET_X_LPARAM(msg->lParam);
+		m_toolInputCommands.mouse_Y = GET_Y_LPARAM(msg->lParam);
 		break;
 
 	case WM_LBUTTONDOWN:	//mouse button down,  you will probably need to check when its up too
 		//set some flag for the mouse button in inputcommands
+		//mouse left pressed.	
+		m_toolInputCommands.mouse_LB_Down = true;
 		break;
+
 
 	}
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
@@ -391,4 +409,8 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.rotLeft = true;
 	}
 	else m_toolInputCommands.rotLeft = false;
+
+
+
+
 }

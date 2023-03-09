@@ -51,6 +51,10 @@ public:
 	void SaveDisplayChunk(ChunkObject *SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
 
+	//lab 6
+	int MousePicking();
+	RECT m_ScreenDimensions;
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif
