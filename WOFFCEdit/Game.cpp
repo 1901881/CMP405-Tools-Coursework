@@ -546,6 +546,11 @@ int Game::MousePicking()
 				{
 					closestPickedDistance = pickedDistance;	
 					selectedID = i;
+
+					if (m_InputCommands.multiSelect == true)
+					{
+						multiSelect.push_back(selectedID);
+					}
 				}
 			}
 		}
@@ -553,6 +558,26 @@ int Game::MousePicking()
 
 	//if we got a hit.  return it.  
 	return selectedID;
+
+}
+
+void Game::MultiSelectAdd(int selectedID)
+{
+	//get id
+	//loop through vector
+	//if id isnt in 
+	//add to it
+	//multiSelect.contains
+	if (m_InputCommands.multiSelect == true)
+	{
+		if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
+		else { //does not contain
+
+			multiSelect.push_back(selectedID);
+		}
+	}
+
+
 
 }
 

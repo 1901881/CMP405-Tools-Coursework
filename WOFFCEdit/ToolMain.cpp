@@ -24,6 +24,8 @@ ToolMain::ToolMain()
 	m_toolInputCommands.mouse_X		= 0;
 	m_toolInputCommands.mouse_Y		= 0;
 	m_toolInputCommands.mouse_LB_Down	= false;
+
+	m_toolInputCommands.multiSelect		= false;
 	
 }
 
@@ -330,8 +332,6 @@ void ToolMain::UpdateInput(MSG * msg)
 		//mouse left pressed.	
 		m_toolInputCommands.mouse_LB_Down = true;
 		break;
-
-
 	}
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
 	//WASD movement
@@ -410,7 +410,10 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.rotLeft = false;
 
-
-
+	if (m_keyArray['M'])
+	{
+		m_toolInputCommands.multiSelect = true;
+	}
+	else m_toolInputCommands.multiSelect = false;
 
 }

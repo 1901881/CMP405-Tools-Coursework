@@ -54,6 +54,9 @@ public:
 	//lab 6
 	int MousePicking();
 	RECT m_ScreenDimensions;
+	std::vector<int> multiSelect;
+
+	void MultiSelectAdd(int selectedID);
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
