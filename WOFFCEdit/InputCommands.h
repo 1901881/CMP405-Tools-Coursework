@@ -21,4 +21,7 @@ struct InputCommands
 
 	bool multiSelect;
 
+
+	long mouseDX;
+	long mouseDY;
 };

@@ -13,6 +13,7 @@
 #include "InputCommands.h"
 #include <vector>
 
+#include "Camera.h"
 
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
@@ -133,7 +134,7 @@ private:
     DirectX::SimpleMath::Matrix                                             m_view;
     DirectX::SimpleMath::Matrix                                             m_projection;
 
-
+	Camera m_camera;
 };
 
 std::wstring StringToWCHART(std::string s);

@@ -142,6 +142,12 @@ void Game::Tick(InputCommands *Input)
 // Updates the world.
 void Game::Update(DX::StepTimer const& timer)
 {
+	m_camera.Update(m_InputCommands);
+
+	//apply camera vectors
+	m_view = m_camera.GetViewMatrix();
+
+	/*
 	//TODO  any more complex than this, and the camera should be abstracted out to somewhere else
 	//camera motion is on a plane, so kill the 7 component of the look direction
 	Vector3 planarMotionVector = m_camLookDirection;
@@ -205,11 +211,14 @@ void Game::Update(DX::StepTimer const& timer)
 
 	//apply camera vectors
     m_view = Matrix::CreateLookAt(m_camPosition, m_camLookAt, Vector3::UnitY);
+	*/
 
     m_batchEffect->SetView(m_view);
     m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_view);
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
+
+	
 
 #ifdef DXTK_AUDIO
     m_audioTimerAcc -= (float)timer.GetElapsedSeconds();
