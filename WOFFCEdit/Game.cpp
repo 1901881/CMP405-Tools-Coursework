@@ -590,6 +590,12 @@ int Game::MousePicking()
 
 }
 
+void Game::Arcball(int selectedObjectID)
+{
+	//m_displayList[selectedObjectID];
+
+}
+
 void Game::MultiSelectAdd(int selectedID)
 {
 	//get id
@@ -608,6 +614,13 @@ void Game::MultiSelectAdd(int selectedID)
 
 
 
+}
+
+void Game::CtrlVPaste(int copiedID)
+{
+	//plays more than once
+	m_displayList.push_back(m_displayList[copiedID]);
+	m_displayList[m_displayList.size() - 1].m_position = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
 }
 
 #ifdef DXTK_AUDIO

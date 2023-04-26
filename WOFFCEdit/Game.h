@@ -57,7 +57,9 @@ public:
 	RECT m_ScreenDimensions;
 	std::vector<int> multiSelect;
 
+	void Arcball(int selectedObjectID);
 	void MultiSelectAdd(int selectedID);
+	void CtrlVPaste(int copiedID);
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();

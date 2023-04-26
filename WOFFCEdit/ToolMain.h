@@ -30,6 +30,8 @@ public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
 	ChunkObject					m_chunk;		//our landscape chunk
 	int m_selectedObject;						//ID of current Selection
+	int m_copiedID = 0;								//ID of copied Selection
+	bool m_pastePlayedOnce = false;								//ID of copied Selection
 
 private:	//methods
 	void	onContentAdded();

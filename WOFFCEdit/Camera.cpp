@@ -77,11 +77,19 @@ void Camera::Update(const InputCommands& m_InputCommands)
 
 void Camera::Arcball(const InputCommands& m_InputCommands, float viewportWidth, float viewportHeight)
 {
+	float lastMousePosX;
+	float lastMousePosY;
+	bool firstClick = false;
+
+	if (firstClick)
+	{
+		lastMousePosX = m_InputCommands.mouse_X;
+		lastMousePosY = m_InputCommands.mouse_Y;
+	}
 	//Vector3 camPosition;
 	//Vector3 camPosition;
 
-	float lastMousePosX;
-	float lastMousePosY;
+	
 
 	Vector3 pivot;//object selected position
 

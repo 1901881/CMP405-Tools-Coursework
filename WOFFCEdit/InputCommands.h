@@ -18,8 +18,13 @@ struct InputCommands
 	int mouse_X;
 	int mouse_Y;
 	bool mouse_LB_Down;
+	bool mouse_RB_Down;
 
 	bool multiSelect;
+
+	bool ctrl_Down;
+	bool c_Down;
+	bool v_Down;
 
 
 	long mouseDX;

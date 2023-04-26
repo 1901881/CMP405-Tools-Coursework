@@ -24,9 +24,12 @@ ToolMain::ToolMain()
 	m_toolInputCommands.mouse_X		= 0;
 	m_toolInputCommands.mouse_Y		= 0;
 	m_toolInputCommands.mouse_LB_Down	= false;
+	m_toolInputCommands.mouse_RB_Down	= false;
 
 	m_toolInputCommands.multiSelect		= false;
-	
+	m_toolInputCommands.ctrl_Down	= false;
+	m_toolInputCommands.c_Down	= false;
+	m_toolInputCommands.v_Down	= false;
 }
 
 
@@ -305,6 +308,32 @@ void ToolMain::Tick(MSG *msg)
 		m_toolInputCommands.mouse_LB_Down = false;
 	}
 
+	//arcball
+	if (m_toolInputCommands.mouse_RB_Down)
+	{
+		//m_d3dRenderer.Arcball(m_selectedObject);
+		/*m_toolInputCommands.mouse_X
+		m_toolInputCommands.mouse_Y*/
+	}
+
+	if (m_toolInputCommands.ctrl_Down && m_toolInputCommands.c_Down)
+	{
+		if (m_selectedObject != -1)
+			m_copiedID = m_selectedObject;
+	}
+
+	if (m_toolInputCommands.ctrl_Down && m_toolInputCommands.v_Down)
+	{
+		if (!m_pastePlayedOnce)
+		{
+			if (m_copiedID != 0)
+				m_d3dRenderer.CtrlVPaste(m_copiedID);
+
+			m_pastePlayedOnce = true;
+		}
+	}
+	
+
 }
 
 void ToolMain::UpdateInput(MSG * msg)
@@ -331,6 +360,18 @@ void ToolMain::UpdateInput(MSG * msg)
 		//set some flag for the mouse button in inputcommands
 		//mouse left pressed.	
 		m_toolInputCommands.mouse_LB_Down = true;
+		break;
+
+	case WM_RBUTTONDOWN:	//mouse button down,  you will probably need to check when its up too
+		//set some flag for the mouse button in inputcommands
+		//mouse right pressed.	
+		m_toolInputCommands.mouse_RB_Down = true;
+		break;
+
+	case WM_RBUTTONUP:	//mouse button down,  you will probably need to check when its up too
+		//set some flag for the mouse button in inputcommands
+		//mouse right unpressed.	
+		m_toolInputCommands.mouse_RB_Down = false;
 		break;
 	}
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
@@ -415,5 +456,30 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.multiSelect = true;
 	}
 	else m_toolInputCommands.multiSelect = false;
+
+	if (m_keyArray[17])
+	{
+		m_toolInputCommands.ctrl_Down = true;
+	}
+	else m_toolInputCommands.ctrl_Down = false;
+	
+
+	if (m_keyArray[67])
+	{
+		m_toolInputCommands.c_Down = true;
+	}
+	else m_toolInputCommands.c_Down = false;
+
+	if (m_keyArray[86])
+	{
+		m_toolInputCommands.v_Down = true;
+	}
+	else
+	{
+		m_toolInputCommands.v_Down = false;
+		m_pastePlayedOnce = false;
+	}
+
+	//https://css-tricks.com/snippets/javascript/javascript-keycodes/
 
 }
