@@ -565,6 +565,26 @@ int Game::MousePicking()
 		}
 	}
 
+
+	//If a object is selected
+	if (selectedID != -1)
+	{
+		if (selectedID == previousSelectedID)
+			selectCounter++;
+		else
+			selectCounter = 1;
+	}
+
+	//Check for double click
+	if (selectCounter >= 2)
+	{
+		m_camera.ObjectFocus(m_displayList[selectedID].m_position);
+		selectCounter = 0;
+	}
+		
+
+	previousSelectedID = selectedID;
+
 	//if we got a hit.  return it.  
 	return selectedID;
 

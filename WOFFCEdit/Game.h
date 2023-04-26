@@ -135,6 +135,9 @@ private:
     DirectX::SimpleMath::Matrix                                             m_projection;
 
 	Camera m_camera;
+
+	int selectCounter = 0;
+	int previousSelectedID = 0;
 };
 
 std::wstring StringToWCHART(std::string s);
