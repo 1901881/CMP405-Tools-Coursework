@@ -31,7 +31,8 @@ public:	//variables
 	ChunkObject					m_chunk;		//our landscape chunk
 	int m_selectedObject;						//ID of current Selection
 	int m_copiedID = 0;								//ID of copied Selection
-	bool m_pastePlayedOnce = false;								//ID of copied Selection
+	bool m_pastePlayedOnce = false;	
+	bool m_scrollPlayedOnce = false;	
 
 private:	//methods
 	void	onContentAdded();

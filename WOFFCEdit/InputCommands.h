@@ -25,7 +25,17 @@ struct InputCommands
 	bool ctrl_Down;
 	bool c_Down;
 	bool v_Down;
+	
+	bool i_Down;
+	bool j_Down;
+	bool k_Down;
+	bool l_Down;
 
+	bool o_Down;
+	bool u_Down;
+
+	bool squareBracket_Left_Down;
+	bool squareBracket_Right_Down;
 
 	long mouseDX;
 	long mouseDY;

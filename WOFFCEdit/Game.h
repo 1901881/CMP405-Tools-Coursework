@@ -60,6 +60,7 @@ public:
 	void Arcball(int selectedObjectID);
 	void MultiSelectAdd(int selectedID);
 	void CtrlVPaste(int copiedID);
+	void ScaleUPAndDown(bool scaleUpOrDown, int selectedID);
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();

@@ -623,6 +623,19 @@ void Game::CtrlVPaste(int copiedID)
 	m_displayList[m_displayList.size() - 1].m_position = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
 }
 
+void Game::ScaleUPAndDown(bool scaleUpOrDown, int selectedID)
+{
+	Vector3 scaleParam = Vector3(0.1, 0.1, 0.1);
+	if (scaleUpOrDown)
+	{
+		m_displayList[selectedID].m_scale = XMVectorAdd(m_displayList[selectedID].m_scale, scaleParam);
+	}
+	else
+	{
+		m_displayList[selectedID].m_scale = XMVectorSubtract(m_displayList[selectedID].m_scale, scaleParam);
+	}
+}
+
 #ifdef DXTK_AUDIO
 void Game::NewAudioDevice()
 {

@@ -26,10 +26,21 @@ ToolMain::ToolMain()
 	m_toolInputCommands.mouse_LB_Down	= false;
 	m_toolInputCommands.mouse_RB_Down	= false;
 
-	m_toolInputCommands.multiSelect		= false;
+	m_toolInputCommands.multiSelect	= false;
 	m_toolInputCommands.ctrl_Down	= false;
-	m_toolInputCommands.c_Down	= false;
-	m_toolInputCommands.v_Down	= false;
+	m_toolInputCommands.c_Down		= false;
+	m_toolInputCommands.v_Down		= false;
+
+	m_toolInputCommands.i_Down		= false;
+	m_toolInputCommands.j_Down		= false;
+	m_toolInputCommands.k_Down		= false;
+	m_toolInputCommands.l_Down		= false;
+
+	m_toolInputCommands.u_Down		= false;
+	m_toolInputCommands.o_Down		= false;
+
+	m_toolInputCommands.squareBracket_Left_Down		= false;
+	m_toolInputCommands.squareBracket_Right_Down		= false;
 }
 
 
@@ -333,6 +344,23 @@ void ToolMain::Tick(MSG *msg)
 		}
 	}
 	
+	if (m_toolInputCommands.squareBracket_Left_Down)
+	{
+		if (!m_scrollPlayedOnce)
+		{
+			m_d3dRenderer.ScaleUPAndDown(true, m_selectedObject);
+			m_scrollPlayedOnce = true;
+		}
+		
+	}
+	if (m_toolInputCommands.squareBracket_Right_Down)
+	{
+		if (!m_scrollPlayedOnce)
+		{
+			m_d3dRenderer.ScaleUPAndDown(false, m_selectedObject);
+			m_scrollPlayedOnce = true;
+		}
+	}
 
 }
 
@@ -372,6 +400,20 @@ void ToolMain::UpdateInput(MSG * msg)
 		//set some flag for the mouse button in inputcommands
 		//mouse right unpressed.	
 		m_toolInputCommands.mouse_RB_Down = false;
+		break;
+
+	case WM_MOUSEWHEEL:
+		if (GET_WHEEL_DELTA_WPARAM(msg->wParam) > 0)
+		{
+			m_toolInputCommands.squareBracket_Left_Down = true;
+			m_toolInputCommands.squareBracket_Right_Down = false;
+		}
+		else if (GET_WHEEL_DELTA_WPARAM(msg->wParam) < 0)
+		{
+			m_toolInputCommands.squareBracket_Left_Down = false;
+			m_toolInputCommands.squareBracket_Right_Down = true;
+		}
+		m_scrollPlayedOnce = false;
 		break;
 	}
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
@@ -479,6 +521,65 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.v_Down = false;
 		m_pastePlayedOnce = false;
 	}
+
+	
+	/// ///////////////////////////////////////////////////////
+	//IJKL
+	if (m_keyArray[73])
+	{
+		m_toolInputCommands.i_Down = true;
+	}
+	else m_toolInputCommands.i_Down = false;
+
+	if (m_keyArray[74])
+	{
+		m_toolInputCommands.j_Down = true;
+	}
+	m_toolInputCommands.j_Down = true;
+
+	if (m_keyArray[75])
+	{
+		m_toolInputCommands.k_Down = true;
+	}
+	else m_toolInputCommands.k_Down = false;
+
+	if (m_keyArray[76])
+	{
+		m_toolInputCommands.l_Down = true;
+	}
+	m_toolInputCommands.l_Down = true;
+
+	// UO
+	if (m_keyArray[85])
+	{
+		m_toolInputCommands.u_Down = true;
+	}
+	else m_toolInputCommands.u_Down = false;
+
+	if (m_keyArray[79])
+	{
+		m_toolInputCommands.o_Down = true;
+	}
+	m_toolInputCommands.o_Down = true;
+
+	// [ ]
+	//if (m_keyArray[79])
+	//{
+	//	m_toolInputCommands.o_Down = true;
+	//}
+	//m_toolInputCommands.o_Down = true;
+
+	//if (m_keyArray['N'])
+	//{
+	//	m_toolInputCommands.squareBracket_Left_Down = true;
+	//}
+	//else m_toolInputCommands.squareBracket_Left_Down = false;
+
+	//if (m_keyArray['M'])
+	//{
+	//	m_toolInputCommands.squareBracket_Right_Down = true;
+	//}
+	//else m_toolInputCommands.squareBracket_Right_Down = false;
 
 	//https://css-tricks.com/snippets/javascript/javascript-keycodes/
 
