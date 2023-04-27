@@ -14,33 +14,7 @@ ToolMain::ToolMain()
 	m_databaseConnection = NULL;
 
 	//zero input commands
-	m_toolInputCommands.forward		= false;
-	m_toolInputCommands.back		= false;
-	m_toolInputCommands.left		= false;
-	m_toolInputCommands.right		= false;
-	m_toolInputCommands.up			= false;
-	m_toolInputCommands.down		= false;
-
-	m_toolInputCommands.mouse_X		= 0;
-	m_toolInputCommands.mouse_Y		= 0;
-	m_toolInputCommands.mouse_LB_Down	= false;
-	m_toolInputCommands.mouse_RB_Down	= false;
-
-	m_toolInputCommands.multiSelect	= false;
-	m_toolInputCommands.ctrl_Down	= false;
-	m_toolInputCommands.c_Down		= false;
-	m_toolInputCommands.v_Down		= false;
-
-	m_toolInputCommands.i_Down		= false;
-	m_toolInputCommands.j_Down		= false;
-	m_toolInputCommands.k_Down		= false;
-	m_toolInputCommands.l_Down		= false;
-
-	m_toolInputCommands.u_Down		= false;
-	m_toolInputCommands.o_Down		= false;
-
-	m_toolInputCommands.squareBracket_Left_Down		= false;
-	m_toolInputCommands.squareBracket_Right_Down		= false;
+	m_toolInputCommands.ResetState();
 }
 
 
@@ -344,7 +318,7 @@ void ToolMain::Tick(MSG *msg)
 		}
 	}
 	
-	if (m_toolInputCommands.squareBracket_Left_Down)
+	if (m_toolInputCommands.mouseWheel_Down_Down)
 	{
 		if (!m_scrollPlayedOnce)
 		{
@@ -353,7 +327,7 @@ void ToolMain::Tick(MSG *msg)
 		}
 		
 	}
-	if (m_toolInputCommands.squareBracket_Right_Down)
+	if (m_toolInputCommands.mouseWheel_UP_Down)
 	{
 		if (!m_scrollPlayedOnce)
 		{
@@ -405,13 +379,13 @@ void ToolMain::UpdateInput(MSG * msg)
 	case WM_MOUSEWHEEL:
 		if (GET_WHEEL_DELTA_WPARAM(msg->wParam) > 0)
 		{
-			m_toolInputCommands.squareBracket_Left_Down = true;
-			m_toolInputCommands.squareBracket_Right_Down = false;
+			m_toolInputCommands.mouseWheel_Down_Down = true;
+			m_toolInputCommands.mouseWheel_UP_Down = false;
 		}
 		else if (GET_WHEEL_DELTA_WPARAM(msg->wParam) < 0)
 		{
-			m_toolInputCommands.squareBracket_Left_Down = false;
-			m_toolInputCommands.squareBracket_Right_Down = true;
+			m_toolInputCommands.mouseWheel_Down_Down = false;
+			m_toolInputCommands.mouseWheel_UP_Down = true;
 		}
 		m_scrollPlayedOnce = false;
 		break;

@@ -34,9 +34,14 @@ struct InputCommands
 	bool o_Down;
 	bool u_Down;
 
-	bool squareBracket_Left_Down;
-	bool squareBracket_Right_Down;
+	bool mouseWheel_Down_Down;
+	bool mouseWheel_UP_Down;
 
 	long mouseDX;
 	long mouseDY;
+
+	void ResetState()
+	{
+		ZeroMemory(this, sizeof(this));
+	}
 };
