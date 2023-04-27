@@ -301,6 +301,7 @@ void ToolMain::Tick(MSG *msg)
 		m_toolInputCommands.mouse_Y*/
 	}
 
+	//Copy and Paste
 	if (m_toolInputCommands.ctrl_Down && m_toolInputCommands.c_Down)
 	{
 		if (m_selectedObject != -1)
@@ -312,12 +313,13 @@ void ToolMain::Tick(MSG *msg)
 		if (!m_pastePlayedOnce)
 		{
 			if (m_copiedID != 0)
-				m_d3dRenderer.CtrlVPaste(m_copiedID);
+				m_d3dRenderer.PasteObject(m_copiedID);
 
 			m_pastePlayedOnce = true;
 		}
 	}
 	
+	//Scale
 	if (m_toolInputCommands.mouseWheel_Down_Down)
 	{
 		if (!m_scrollPlayedOnce)
@@ -336,6 +338,28 @@ void ToolMain::Tick(MSG *msg)
 		}
 	}
 
+	//Object Movement
+	if (m_toolInputCommands.i_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Forward);
+		m_toolInputCommands.i_Down = false;
+	}
+	if (m_toolInputCommands.k_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Backward);
+		m_toolInputCommands.k_Down = false;
+	}
+	if (m_toolInputCommands.l_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Right);
+		m_toolInputCommands.l_Down = false;
+	}
+	if (m_toolInputCommands.j_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Left);
+		m_toolInputCommands.j_Down = false;
+	}
+	
 }
 
 void ToolMain::UpdateInput(MSG * msg)
@@ -509,7 +533,7 @@ void ToolMain::UpdateInput(MSG * msg)
 	{
 		m_toolInputCommands.j_Down = true;
 	}
-	m_toolInputCommands.j_Down = true;
+	else m_toolInputCommands.j_Down = false;
 
 	if (m_keyArray[75])
 	{
@@ -521,7 +545,7 @@ void ToolMain::UpdateInput(MSG * msg)
 	{
 		m_toolInputCommands.l_Down = true;
 	}
-	m_toolInputCommands.l_Down = true;
+	else m_toolInputCommands.l_Down = false;
 
 	// UO
 	if (m_keyArray[85])
@@ -534,7 +558,7 @@ void ToolMain::UpdateInput(MSG * msg)
 	{
 		m_toolInputCommands.o_Down = true;
 	}
-	m_toolInputCommands.o_Down = true;
+	else m_toolInputCommands.o_Down = false;
 
 	// [ ]
 	//if (m_keyArray[79])

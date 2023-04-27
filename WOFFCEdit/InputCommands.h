@@ -44,4 +44,14 @@ struct InputCommands
 	{
 		ZeroMemory(this, sizeof(this));
 	}
+
+	enum MoveDirection
+	{
+		Forward,
+		Backward,
+		Left,
+		Right,
+		Up,
+		Down
+	};
 };

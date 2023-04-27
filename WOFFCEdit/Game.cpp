@@ -28,30 +28,31 @@ Game::Game()
 	m_movespeed = 0.30;
 	m_camRotRate = 3.0;
 
+	//delete?
 	//camera
-	m_camPosition.x = 0.0f;
-	m_camPosition.y = 3.7f;
-	m_camPosition.z = -3.5f;
+	//m_camPosition.x = 0.0f;
+	//m_camPosition.y = 3.7f;
+	//m_camPosition.z = -3.5f;
 
-	m_camOrientation.x = 0;
-	m_camOrientation.y = 0;
-	m_camOrientation.z = 0;
+	//m_camOrientation.x = 0;
+	//m_camOrientation.y = 0;
+	//m_camOrientation.z = 0;
 
-	m_camLookAt.x = 0.0f;
-	m_camLookAt.y = 0.0f;
-	m_camLookAt.z = 0.0f;
+	//m_camLookAt.x = 0.0f;
+	//m_camLookAt.y = 0.0f;
+	//m_camLookAt.z = 0.0f;
 
-	m_camLookDirection.x = 0.0f;
-	m_camLookDirection.y = 0.0f;
-	m_camLookDirection.z = 0.0f;
+	//m_camLookDirection.x = 0.0f;
+	//m_camLookDirection.y = 0.0f;
+	//m_camLookDirection.z = 0.0f;
 
-	m_camRight.x = 0.0f;
-	m_camRight.y = 0.0f;
-	m_camRight.z = 0.0f;
+	//m_camRight.x = 0.0f;
+	//m_camRight.y = 0.0f;
+	//m_camRight.z = 0.0f;
 
-	m_camOrientation.x = 0.0f;
-	m_camOrientation.y = 0.0f;
-	m_camOrientation.z = 0.0f;
+	//m_camOrientation.x = 0.0f;
+	//m_camOrientation.y = 0.0f;
+	//m_camOrientation.z = 0.0f;
 
 }
 
@@ -617,11 +618,65 @@ void Game::MultiSelectAdd(int selectedID)
 
 }
 
-void Game::CtrlVPaste(int copiedID)
+void Game::PasteObject(int copiedID)
 {
 	//plays more than once
 	m_displayList.push_back(m_displayList[copiedID]);
 	m_displayList[m_displayList.size() - 1].m_position = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
+}
+
+void Game::MoveObject(int selectedID, InputCommands::MoveDirection moveDirection)
+{
+	Vector3 tempPos = m_displayList[selectedID].m_position;
+	float objectInitialYPosition = m_displayList[selectedID].m_position.y;
+	float moveSpeed = 0.1;
+
+	switch (moveDirection) 
+	{
+	case InputCommands::Forward:
+		tempPos -= m_camera.GetLookAt() * moveSpeed;
+		tempPos.y = objectInitialYPosition;
+		m_displayList[selectedID].m_position = tempPos;
+		break;
+	case InputCommands::Backward:
+		tempPos += m_camera.GetLookAt() * moveSpeed;
+		tempPos.y = objectInitialYPosition;
+		m_displayList[selectedID].m_position = tempPos;
+		break;
+	case InputCommands::Right:
+		tempPos += m_camera.GetRightVector() * moveSpeed;
+		tempPos.y = objectInitialYPosition;
+		m_displayList[selectedID].m_position = tempPos;
+		break;
+	case InputCommands::Left:
+		tempPos -= m_camera.GetRightVector() * moveSpeed;
+		tempPos.y = objectInitialYPosition;
+		m_displayList[selectedID].m_position = tempPos;
+		break;
+	default:
+		break;
+	}
+	//struct moveDirections
+	
+	//process input and update stuff
+	
+	//if (m_InputCommands.right)
+	//{
+	//	m_camPosition += m_camRight * m_movespeed;
+	//}
+	//if (m_InputCommands.left)
+	//{
+	//	m_camPosition -= m_camRight * m_movespeed;
+	//}
+
+	//if (m_InputCommands.up)
+	//{
+	//	m_camPosition.y += m_movespeed;
+	//}
+	//if (m_InputCommands.down)
+	//{
+	//	m_camPosition.y -= m_movespeed;
+	//}
 }
 
 void Game::ScaleUPAndDown(bool scaleUpOrDown, int selectedID)

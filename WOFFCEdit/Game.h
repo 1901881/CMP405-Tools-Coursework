@@ -59,8 +59,9 @@ public:
 
 	void Arcball(int selectedObjectID);
 	void MultiSelectAdd(int selectedID);
-	void CtrlVPaste(int copiedID);
+	void PasteObject(int copiedID);
 	void ScaleUPAndDown(bool scaleUpOrDown, int selectedID);
+	void MoveObject(int selectedID, InputCommands::MoveDirection moveDirection);
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
@@ -141,6 +142,9 @@ private:
 
 	int selectCounter = 0;
 	int previousSelectedID = 0;
+
+	//object movement
+	//float objectInitialYPosition;
 };
 
 std::wstring StringToWCHART(std::string s);
