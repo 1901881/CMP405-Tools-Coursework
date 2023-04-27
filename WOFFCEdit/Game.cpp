@@ -653,30 +653,15 @@ void Game::MoveObject(int selectedID, InputCommands::MoveDirection moveDirection
 		tempPos.y = objectInitialYPosition;
 		m_displayList[selectedID].m_position = tempPos;
 		break;
+	case InputCommands::Up:
+		m_displayList[selectedID].m_position.y += moveSpeed;
+		break;
+	case InputCommands::Down:
+		m_displayList[selectedID].m_position.y -= moveSpeed;
+		break;
 	default:
 		break;
 	}
-	//struct moveDirections
-	
-	//process input and update stuff
-	
-	//if (m_InputCommands.right)
-	//{
-	//	m_camPosition += m_camRight * m_movespeed;
-	//}
-	//if (m_InputCommands.left)
-	//{
-	//	m_camPosition -= m_camRight * m_movespeed;
-	//}
-
-	//if (m_InputCommands.up)
-	//{
-	//	m_camPosition.y += m_movespeed;
-	//}
-	//if (m_InputCommands.down)
-	//{
-	//	m_camPosition.y -= m_movespeed;
-	//}
 }
 
 void Game::ScaleUPAndDown(bool scaleUpOrDown, int selectedID)

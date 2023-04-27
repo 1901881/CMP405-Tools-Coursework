@@ -359,6 +359,16 @@ void ToolMain::Tick(MSG *msg)
 		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Left);
 		m_toolInputCommands.j_Down = false;
 	}
+	if (m_toolInputCommands.o_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Up);
+		m_toolInputCommands.o_Down = false;
+	}
+	if (m_toolInputCommands.u_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Down);
+		m_toolInputCommands.u_Down = false;
+	}
 	
 }
 
