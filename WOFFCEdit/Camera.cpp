@@ -133,6 +133,11 @@ DirectX::SimpleMath::Vector3 Camera::GetPosition() const
 	return m_camPosition;
 }
 
+DirectX::SimpleMath::Vector3 Camera::GetOrientation() const
+{
+	return m_camOrientation;
+}
+
 DirectX::SimpleMath::Vector3 Camera::GetLookAt() const
 {
 	return m_lookAt;

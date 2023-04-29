@@ -34,6 +34,11 @@ struct InputCommands
 	bool o_Down;
 	bool u_Down;
 
+	bool numPad8_Down;
+	bool numPad4_Down;
+	bool numPad2_Down;
+	bool numPad6_Down;
+
 	bool mouseWheel_Down_Down;
 	bool mouseWheel_UP_Down;
 
@@ -52,6 +57,10 @@ struct InputCommands
 		Left,
 		Right,
 		Up,
-		Down
+		Down,
+		RotLeft,
+		RotRight,
+		RotUp,
+		RotDown
 	};
 };

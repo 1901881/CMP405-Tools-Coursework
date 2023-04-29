@@ -10,6 +10,13 @@
 #include "MFCFrame.h"
 #include "SelectDialogue.h"
 
+#include <sstream>
+#include <algorithm>
+#include <vector>
+//#include <Utilities.h>
+#include <codecvt>
+#include <locale>
+
 
 class MFCMain : public CWinApp 
 {

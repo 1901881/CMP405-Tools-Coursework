@@ -558,10 +558,7 @@ int Game::MousePicking()
 					closestPickedDistance = pickedDistance;	
 					selectedID = i;
 
-					if (m_InputCommands.multiSelect == true)
-					{
-						multiSelect.push_back(selectedID);
-					}
+					
 				}
 			}
 		}
@@ -575,6 +572,9 @@ int Game::MousePicking()
 			selectCounter++;
 		else
 			selectCounter = 1;
+
+		//object highlight
+		ObjectHighlight(selectedID);
 	}
 
 	//Check for double click
@@ -605,15 +605,11 @@ void Game::MultiSelectAdd(int selectedID)
 	//if id isnt in 
 	//add to it
 	//multiSelect.contains
-	if (m_InputCommands.multiSelect == true)
-	{
-		if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
-		else { //does not contain
+	if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
+	else { //does not contain
 
-			multiSelect.push_back(selectedID);
-		}
+		multiSelect.push_back(selectedID);
 	}
-
 
 
 }
@@ -659,9 +655,30 @@ void Game::MoveObject(int selectedID, InputCommands::MoveDirection moveDirection
 	case InputCommands::Down:
 		m_displayList[selectedID].m_position.y -= moveSpeed;
 		break;
+	case InputCommands::RotDown:
+		//how would i make it move in the cameras direction
+		//m_camOrientation.x -= m_camRotRate;
+		m_displayList[selectedID].m_orientation.x -= m_camera.GetOrientation().x * moveSpeed;
+		break;
 	default:
 		break;
 	}
+}
+
+void Game::ObjectHighlight(int selectedID)
+{
+	m_displayList[selectedID].ObjectHighlight();
+
+	m_displayList[selectedID].m_model->UpdateEffects([&](IEffect* effect)
+		{
+			auto lights = dynamic_cast<BasicEffect*>(effect);
+	if (lights)
+	{
+		lights->SetTexture(m_displayList[selectedID].m_texture_diffuse);
+	}
+		});
+
+	
 }
 
 void Game::ScaleUPAndDown(bool scaleUpOrDown, int selectedID)

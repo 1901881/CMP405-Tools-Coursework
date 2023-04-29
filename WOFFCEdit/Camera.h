@@ -18,6 +18,7 @@ public:
 	Matrix GetViewMatrix() const;
 	
 	Vector3 GetPosition() const;
+	Vector3 GetOrientation() const;
 	Vector3 GetLookAt() const;
 	Vector3 GetUpVector() const;
 	Vector3 GetRightVector() const;
@@ -35,7 +36,7 @@ private:
 
 	Vector3 m_rightVector;
 
-	float m_moveSpeed = 0.3f;
+	float m_moveSpeed = 0.05f;
 	float m_camRotRate = 3.f;
 
 	//Object Focus

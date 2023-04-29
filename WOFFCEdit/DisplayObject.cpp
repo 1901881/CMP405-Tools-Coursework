@@ -30,3 +30,26 @@ DisplayObject::~DisplayObject()
 {
 //	delete m_texture_diffuse;
 }
+
+void DisplayObject::ObjectHighlight()
+{
+
+	//std::shared_ptr<DirectX::IEffect> effect;
+
+	//auto ifog = dynamic_cast<DirectX::IEffectFog*>(effect.get());
+	//if (ifog)
+	//{
+	//	ifog->SetFogEnabled(true);
+	//	ifog->SetFogColor(DirectX::Colors::Yellow);
+	//}
+
+
+
+	//std::shared_ptr<DirectX::BasicEffect> effect;
+
+	//DirectX::BasicEffect* effect;
+	//effect->SetFogEnabled(true);
+	//effect->SetFogStart(6);
+	//effect->SetFogEnd(8);
+	//effect->SetFogColor(DirectX::Colors::Yellow);
+}

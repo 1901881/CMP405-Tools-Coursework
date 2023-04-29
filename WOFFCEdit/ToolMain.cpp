@@ -293,6 +293,13 @@ void ToolMain::Tick(MSG *msg)
 		m_toolInputCommands.mouse_LB_Down = false;
 	}
 
+	//multiselect
+	if (m_toolInputCommands.multiSelect)
+	{
+		m_d3dRenderer.MultiSelectAdd(m_selectedObject);
+		m_toolInputCommands.multiSelect = false;
+	}
+
 	//arcball
 	if (m_toolInputCommands.mouse_RB_Down)
 	{
@@ -368,6 +375,28 @@ void ToolMain::Tick(MSG *msg)
 	{
 		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Down);
 		m_toolInputCommands.u_Down = false;
+	}
+
+	//Object Rotation
+	if (m_toolInputCommands.numPad8_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::RotDown);
+		m_toolInputCommands.numPad8_Down = false;
+	}
+	if (m_toolInputCommands.numPad4_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::RotLeft);
+		m_toolInputCommands.numPad4_Down = false;
+	}
+	if (m_toolInputCommands.numPad2_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::RotUp);
+		m_toolInputCommands.numPad2_Down = false;
+	}
+	if (m_toolInputCommands.numPad6_Down)
+	{
+		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::RotRight);
+		m_toolInputCommands.numPad6_Down = false;
 	}
 	
 }
@@ -570,24 +599,35 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.o_Down = false;
 
-	// [ ]
-	//if (m_keyArray[79])
-	//{
-	//	m_toolInputCommands.o_Down = true;
-	//}
-	//m_toolInputCommands.o_Down = true;
+	//Numpad
+	//8 - 104
+	//4 - 100
+	//2 - 98
+	//6 - 102
+	if (m_keyArray[104])
+	{
+		m_toolInputCommands.numPad8_Down = true;
+	}
+	else m_toolInputCommands.numPad8_Down = false;
 
-	//if (m_keyArray['N'])
-	//{
-	//	m_toolInputCommands.squareBracket_Left_Down = true;
-	//}
-	//else m_toolInputCommands.squareBracket_Left_Down = false;
+	if (m_keyArray[100])
+	{
+		m_toolInputCommands.numPad4_Down = true;
+	}
+	else m_toolInputCommands.numPad4_Down = false;
 
-	//if (m_keyArray['M'])
-	//{
-	//	m_toolInputCommands.squareBracket_Right_Down = true;
-	//}
-	//else m_toolInputCommands.squareBracket_Right_Down = false;
+	if (m_keyArray[98])
+	{
+		m_toolInputCommands.numPad2_Down = true;
+	}
+	else m_toolInputCommands.numPad2_Down = false;
+
+	if (m_keyArray[102])
+	{
+		m_toolInputCommands.numPad6_Down = true;
+	}
+	else m_toolInputCommands.numPad6_Down = false;
+
 
 	//https://css-tricks.com/snippets/javascript/javascript-keycodes/
 

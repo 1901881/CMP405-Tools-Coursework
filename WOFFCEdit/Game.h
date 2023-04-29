@@ -62,6 +62,7 @@ public:
 	void PasteObject(int copiedID);
 	void ScaleUPAndDown(bool scaleUpOrDown, int selectedID);
 	void MoveObject(int selectedID, InputCommands::MoveDirection moveDirection);
+	void ObjectHighlight(int selectedID);
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
