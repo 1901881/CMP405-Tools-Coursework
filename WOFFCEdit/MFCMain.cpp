@@ -81,23 +81,29 @@ int MFCMain::Run()
 			//https://stackoverflow.com/questions/2518979/how-to-transform-a-vectorint-into-a-string
 		https://hashnode.com/post/converting-stdstring-to-stdwstring-cka1q0zj5020fbls1ml34841w
 
-			std::vector<int> multiSelect;//now make this function
-			multiSelect.push_back(1);
-			multiSelect.push_back(2);
+			std::vector<int> multiSelectID = m_ToolSystem.getMultiSelectionIDs();//now make this function
+			/*multiSelect.push_back(1);
+			multiSelect.push_back(2);*/
 
-			std::stringstream result;
-			std::copy(multiSelect.begin(), multiSelect.end(), std::ostream_iterator<int>(result, ", "));
-			//result.str().erase(result.str().end(), result.str().end()-1);
-			std::wstring wideString =
-				std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(result.str());
-			wideString.erase(wideString.size()-2);
+			//if multiselect contains anything play
+			if (!multiSelectID.empty())
+			{
+				std::stringstream result;
+				std::copy(multiSelectID.begin(), multiSelectID.end(), std::ostream_iterator<int>(result, ", "));
+				//result.str().erase(result.str().end(), result.str().end()-1);
+				std::wstring wideString =
+					std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(result.str());
+				wideString.erase(wideString.size() - 2);
 
-			std::wstring statusString = L"Selected Object: " + wideString;
-			//statusString.erase(1);
+				std::wstring statusString = L"Selected Object: " + wideString;
+				//statusString.erase(1);
+				
+
+				//send current object ID to status bar in The main frame
+				m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);
+			}
+
 			m_ToolSystem.Tick(&msg);
-
-			//send current object ID to status bar in The main frame
-			m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);
 		}
 	}
 

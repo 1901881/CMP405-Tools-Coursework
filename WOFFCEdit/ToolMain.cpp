@@ -10,6 +10,7 @@ ToolMain::ToolMain()
 
 	m_currentChunk = 0;		//default value
 	m_selectedObject = 0;	//initial selection ID
+	m_multiSelectIDs.push_back(m_selectedObject);	//initial selection ID
 	m_sceneGraph.clear();	//clear the vector for the scenegraph
 	m_databaseConnection = NULL;
 
@@ -26,8 +27,12 @@ ToolMain::~ToolMain()
 
 int ToolMain::getCurrentSelectionID()
 {
-
 	return m_selectedObject;
+}
+
+std::vector<int> ToolMain::getMultiSelectionIDs()
+{
+	return m_multiSelectIDs;
 }
 
 void ToolMain::onActionInitialise(HWND handle, int width, int height)
@@ -289,21 +294,25 @@ void ToolMain::Tick(MSG *msg)
 	//lab6
 	if (m_toolInputCommands.mouse_LB_Down)
 	{
-		m_selectedObject = m_d3dRenderer.MousePicking();
+		m_multiSelectIDs = m_d3dRenderer.MousePicking();
 		m_toolInputCommands.mouse_LB_Down = false;
 	}
 
 	//multiselect
 	if (m_toolInputCommands.multiSelect)
 	{
-		m_d3dRenderer.MultiSelectAdd(m_selectedObject);
-		m_toolInputCommands.multiSelect = false;
+		m_d3dRenderer.multiSelectActive = true;
+		//m_toolInputCommands.multiSelect = false;
+	}
+	else if (!m_toolInputCommands.multiSelect)
+	{
+		m_d3dRenderer.multiSelectActive = false;
 	}
 
 	//arcball
 	if (m_toolInputCommands.mouse_RB_Down)
 	{
-		//m_d3dRenderer.Arcball(m_selectedObject);
+		//m_d3dRenderer.Arcball(m_multiSelectIDs.front());
 		/*m_toolInputCommands.mouse_X
 		m_toolInputCommands.mouse_Y*/
 	}
@@ -311,8 +320,8 @@ void ToolMain::Tick(MSG *msg)
 	//Copy and Paste
 	if (m_toolInputCommands.ctrl_Down && m_toolInputCommands.c_Down)
 	{
-		if (m_selectedObject != -1)
-			m_copiedID = m_selectedObject;
+		if (m_multiSelectIDs.front() != -1)
+			m_copiedID = m_multiSelectIDs.front();
 	}
 
 	if (m_toolInputCommands.ctrl_Down && m_toolInputCommands.v_Down)
@@ -331,7 +340,7 @@ void ToolMain::Tick(MSG *msg)
 	{
 		if (!m_scrollPlayedOnce)
 		{
-			m_d3dRenderer.ScaleUPAndDown(true, m_selectedObject);
+			m_d3dRenderer.ScaleUPAndDown(true, m_multiSelectIDs.front());
 			m_scrollPlayedOnce = true;
 		}
 		
@@ -340,7 +349,7 @@ void ToolMain::Tick(MSG *msg)
 	{
 		if (!m_scrollPlayedOnce)
 		{
-			m_d3dRenderer.ScaleUPAndDown(false, m_selectedObject);
+			m_d3dRenderer.ScaleUPAndDown(false, m_multiSelectIDs.front());
 			m_scrollPlayedOnce = true;
 		}
 	}
@@ -348,54 +357,54 @@ void ToolMain::Tick(MSG *msg)
 	//Object Movement
 	if (m_toolInputCommands.i_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Forward);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::Forward);
 		m_toolInputCommands.i_Down = false;
 	}
 	if (m_toolInputCommands.k_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Backward);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::Backward);
 		m_toolInputCommands.k_Down = false;
 	}
 	if (m_toolInputCommands.l_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Right);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::Right);
 		m_toolInputCommands.l_Down = false;
 	}
 	if (m_toolInputCommands.j_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Left);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::Left);
 		m_toolInputCommands.j_Down = false;
 	}
 	if (m_toolInputCommands.o_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Up);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::Up);
 		m_toolInputCommands.o_Down = false;
 	}
 	if (m_toolInputCommands.u_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::Down);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::Down);
 		m_toolInputCommands.u_Down = false;
 	}
 
 	//Object Rotation
 	if (m_toolInputCommands.numPad8_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::RotDown);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::RotDown);
 		m_toolInputCommands.numPad8_Down = false;
 	}
 	if (m_toolInputCommands.numPad4_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::RotLeft);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::RotLeft);
 		m_toolInputCommands.numPad4_Down = false;
 	}
 	if (m_toolInputCommands.numPad2_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::RotUp);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::RotUp);
 		m_toolInputCommands.numPad2_Down = false;
 	}
 	if (m_toolInputCommands.numPad6_Down)
 	{
-		m_d3dRenderer.MoveObject(m_selectedObject, InputCommands::RotRight);
+		m_d3dRenderer.MoveObject(m_multiSelectIDs.front(), InputCommands::RotRight);
 		m_toolInputCommands.numPad6_Down = false;
 	}
 	

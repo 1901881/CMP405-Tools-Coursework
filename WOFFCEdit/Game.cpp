@@ -513,7 +513,7 @@ void Game::SaveDisplayChunk(ChunkObject * SceneChunk)
 	m_displayChunk.SaveHeightMap();			//save heightmap to file.
 }
 
-int Game::MousePicking()
+std::vector<int> Game::MousePicking()
 {
 	int selectedID = -1;
 	float pickedDistance = 0;
@@ -557,13 +557,47 @@ int Game::MousePicking()
 				{
 					closestPickedDistance = pickedDistance;	
 					selectedID = i;
-
 					
+					if (multiSelect.size() > 1)
+					{
+						//multiSelect.clear();
+					}
 				}
 			}
 		}
 	}
 
+	
+
+	if (multiSelectActive)
+	{
+		multiSelect.push_back(previousSelectedID);
+		if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
+		else { //does not contain
+
+			multiSelect.front() = selectedID;
+		}
+	}
+
+	if (multiSelect.empty())
+	{
+		multiSelect.push_back(selectedID);
+	}
+	else
+		multiSelect.front() = selectedID;
+
+	//if multi slect is not active and mouse hit object not within multiselect clear it
+	if (!multiSelectActive)
+	{
+		for (auto& element : multiSelect) {
+			
+			if (element == selectedID)
+			{
+				multiSelect.clear();
+				multiSelect.push_back(selectedID);
+			}
+		}
+	}
 
 	//If a object is selected
 	if (selectedID != -1)
@@ -588,7 +622,28 @@ int Game::MousePicking()
 	previousSelectedID = selectedID;
 
 	//if we got a hit.  return it.  
-	return selectedID;
+	//return selectedID;
+	return multiSelect;
+
+}
+
+std::vector<int> Game::MultiSelectAdd(int selectedID)
+{
+	//get id
+	//loop through vector
+	//if id isnt in 
+	//add to it
+	//multiSelect.contains
+
+	//on first multiselect add clear
+
+	if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
+	else { //does not contain
+
+		multiSelect.push_back(selectedID);
+	}
+
+	return multiSelect;
 
 }
 
@@ -598,21 +653,7 @@ void Game::Arcball(int selectedObjectID)
 
 }
 
-void Game::MultiSelectAdd(int selectedID)
-{
-	//get id
-	//loop through vector
-	//if id isnt in 
-	//add to it
-	//multiSelect.contains
-	if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
-	else { //does not contain
 
-		multiSelect.push_back(selectedID);
-	}
-
-
-}
 
 void Game::PasteObject(int copiedID)
 {

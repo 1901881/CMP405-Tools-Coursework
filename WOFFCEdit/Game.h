@@ -53,12 +53,13 @@ public:
 	void ClearDisplayList();
 
 	//lab 6
-	int MousePicking();
+	std::vector<int> MousePicking();
 	RECT m_ScreenDimensions;
 	std::vector<int> multiSelect;
+	bool multiSelectActive = false;
 
 	void Arcball(int selectedObjectID);
-	void MultiSelectAdd(int selectedID);
+	std::vector<int> MultiSelectAdd(int selectedID);
 	void PasteObject(int copiedID);
 	void ScaleUPAndDown(bool scaleUpOrDown, int selectedID);
 	void MoveObject(int selectedID, InputCommands::MoveDirection moveDirection);
@@ -143,6 +144,7 @@ private:
 
 	int selectCounter = 0;
 	int previousSelectedID = 0;
+	
 
 	//object movement
 	//float objectInitialYPosition;
