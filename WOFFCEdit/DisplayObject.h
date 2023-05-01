@@ -8,7 +8,7 @@ public:
 	DisplayObject();
 	~DisplayObject();
 
-	void ObjectHighlight();
+	void ObjectHighlight(bool highlightState);
 
 	std::shared_ptr<DirectX::Model>						m_model;							//main Mesh
 	ID3D11ShaderResourceView *							m_texture_diffuse;					//diffuse texture
@@ -28,5 +28,7 @@ public:
 	float	m_light_constant;
 	float	m_light_linear;
 	float	m_light_quadratic;
+
 };
+
 

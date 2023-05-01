@@ -15,6 +15,9 @@
 
 #include "Camera.h"
 
+#include <iostream>
+#include <algorithm>
+
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
 class Game : public DX::IDeviceNotify
@@ -63,7 +66,7 @@ public:
 	void PasteObject(std::vector<int> copiedIDs);
 	void ScaleUPAndDown(bool scaleUpOrDown, std::vector<int> selectedIDs);
 	void MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
-	void ObjectHighlight(int selectedID);
+	void ObjectHighlight(std::vector<int> selectedIDs);
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();

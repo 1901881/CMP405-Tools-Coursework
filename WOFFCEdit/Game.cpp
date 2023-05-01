@@ -562,62 +562,62 @@ std::vector<int> Game::MousePicking()
 		}
 	}
 
-	
-
-	if (multiSelectActive)
-	{
-		
-		if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
-		else { //does not contain
-			multiSelect.push_back(previousSelectedID);
-			multiSelect.front() = selectedID;
-		}
-	}
-
-	if (multiSelect.empty())
-	{
-		multiSelect.push_back(selectedID);
-	}
-	else
-		multiSelect.front() = selectedID;
-
-	//if multi slect is not active and mouse hit object not within multiselect clear it
-	if (!multiSelectActive)
-	{
-		for (auto& element : multiSelect) {
-			
-			if (element == selectedID)
-			{
-				multiSelect.clear();
-				multiSelect.push_back(selectedID);
-			}
-		}
-	}
-
-	//If a object is selected
 	if (selectedID != -1)
 	{
+		if (multiSelectActive)
+		{
+			if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
+			else { //does not contain
+				multiSelect.push_back(previousSelectedID);
+				multiSelect.front() = selectedID;
+			}
+		}
+
+		if (multiSelect.empty())
+		{
+
+			multiSelect.push_back(selectedID);
+		}
+		else
+			multiSelect.front() = selectedID;
+
+		//if multi slect is not active and mouse hit object not within multiselect clear it
+		if (!multiSelectActive)
+		{
+			for (auto& element : multiSelect) {
+
+				if (element == selectedID)
+				{
+					multiSelect.clear();
+					multiSelect.push_back(selectedID);
+				}
+			}
+		}
+
+		//If a object is selected
+		ObjectHighlight(multiSelect);
 		if (selectedID == previousSelectedID)
 			selectCounter++;
 		else
 			selectCounter = 1;
 
-		//object highlight
-		ObjectHighlight(selectedID);
+		//Check for double click
+		if (selectCounter >= 2)
+		{
+			m_camera.ObjectFocus(m_displayList[selectedID].m_position);
+			selectCounter = 0;
+		}
+
+
+		previousSelectedID = selectedID;
+
+		//if we got a hit.  return it.  
+		//return selectedID;
+
+
+
+		//multiselect fron highlight
 	}
-
-	//Check for double click
-	if (selectCounter >= 2)
-	{
-		m_camera.ObjectFocus(m_displayList[selectedID].m_position);
-		selectCounter = 0;
-	}
-		
-
-	previousSelectedID = selectedID;
-
-	//if we got a hit.  return it.  
-	//return selectedID;
 	return multiSelect;
 
 }
@@ -707,20 +707,21 @@ void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection m
 	}
 }
 
-void Game::ObjectHighlight(int selectedID)
+void Game::ObjectHighlight(std::vector<int> selectedIDs)
 {
-	m_displayList[selectedID].ObjectHighlight();
-
-	m_displayList[selectedID].m_model->UpdateEffects([&](IEffect* effect)
-		{
-			auto lights = dynamic_cast<BasicEffect*>(effect);
-	if (lights)
+	//clear highlight
+	if (!m_displayList.empty())
 	{
-		lights->SetTexture(m_displayList[selectedID].m_texture_diffuse);
+		for (auto& element : m_displayList) {
+			element.ObjectHighlight(false);
+		}
+		//highlight selected ids
+		for (auto& element : selectedIDs)
+		{
+			m_displayList[element].ObjectHighlight(true);
+		}
 	}
-		});
 
-	
 }
 
 void Game::ScaleUPAndDown(bool scaleUpOrDown, std::vector<int> selectedIDs)

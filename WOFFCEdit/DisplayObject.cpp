@@ -31,7 +31,7 @@ DisplayObject::~DisplayObject()
 //	delete m_texture_diffuse;
 }
 
-void DisplayObject::ObjectHighlight()
+void DisplayObject::ObjectHighlight(bool highlightState)
 {
 
 	//std::shared_ptr<DirectX::IEffect> effect;
@@ -52,4 +52,15 @@ void DisplayObject::ObjectHighlight()
 	//effect->SetFogStart(6);
 	//effect->SetFogEnd(8);
 	//effect->SetFogColor(DirectX::Colors::Yellow);
+
+
+	m_model->UpdateEffects([&](DirectX::IEffect* effect)
+		{
+			auto highlightFog = dynamic_cast<DirectX::IEffectFog*>(effect);
+	if (highlightFog)
+	{
+		highlightFog->SetFogEnabled(highlightState);
+		highlightFog->SetFogColor(DirectX::Colors::Yellow);
+	}
+		});
 }
