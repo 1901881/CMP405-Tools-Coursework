@@ -32,7 +32,7 @@ public:	//variables
 	ChunkObject					m_chunk;		//our landscape chunk
 	int m_selectedObject;	
 	std::vector<int> m_multiSelectIDs; //IDs of current Selection
-	int m_copiedID = 0;								//ID of copied Selection
+	std::vector<int> m_copiedIDs;								//ID of copied Selection
 	bool m_pastePlayedOnce = false;	
 	bool m_scrollPlayedOnce = false;	
 

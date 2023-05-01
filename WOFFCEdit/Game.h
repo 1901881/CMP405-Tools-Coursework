@@ -60,9 +60,9 @@ public:
 
 	void Arcball(int selectedObjectID);
 	std::vector<int> MultiSelectAdd(int selectedID);
-	void PasteObject(int copiedID);
-	void ScaleUPAndDown(bool scaleUpOrDown, int selectedID);
-	void MoveObject(int selectedID, InputCommands::MoveDirection moveDirection);
+	void PasteObject(std::vector<int> copiedIDs);
+	void ScaleUPAndDown(bool scaleUpOrDown, std::vector<int> selectedIDs);
+	void MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
 	void ObjectHighlight(int selectedID);
 
 #ifdef DXTK_AUDIO

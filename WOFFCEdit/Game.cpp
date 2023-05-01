@@ -557,11 +557,6 @@ std::vector<int> Game::MousePicking()
 				{
 					closestPickedDistance = pickedDistance;	
 					selectedID = i;
-					
-					if (multiSelect.size() > 1)
-					{
-						//multiSelect.clear();
-					}
 				}
 			}
 		}
@@ -571,10 +566,10 @@ std::vector<int> Game::MousePicking()
 
 	if (multiSelectActive)
 	{
-		multiSelect.push_back(previousSelectedID);
+		
 		if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
 		else { //does not contain
-
+			multiSelect.push_back(previousSelectedID);
 			multiSelect.front() = selectedID;
 		}
 	}
@@ -655,54 +650,60 @@ void Game::Arcball(int selectedObjectID)
 
 
 
-void Game::PasteObject(int copiedID)
+void Game::PasteObject(std::vector<int> copiedIDs)
 {
 	//plays more than once
-	m_displayList.push_back(m_displayList[copiedID]);
-	m_displayList[m_displayList.size() - 1].m_position = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
+	for (auto& element : copiedIDs)
+	{
+		m_displayList.push_back(m_displayList[element]);
+		m_displayList[m_displayList.size() - 1].m_position = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
+	}
 }
 
-void Game::MoveObject(int selectedID, InputCommands::MoveDirection moveDirection)
+void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection)
 {
-	Vector3 tempPos = m_displayList[selectedID].m_position;
-	float objectInitialYPosition = m_displayList[selectedID].m_position.y;
-	float moveSpeed = 0.1;
-
-	switch (moveDirection) 
+	for (auto& element : copiedIDs)
 	{
-	case InputCommands::Forward:
-		tempPos -= m_camera.GetLookAt() * moveSpeed;
-		tempPos.y = objectInitialYPosition;
-		m_displayList[selectedID].m_position = tempPos;
-		break;
-	case InputCommands::Backward:
-		tempPos += m_camera.GetLookAt() * moveSpeed;
-		tempPos.y = objectInitialYPosition;
-		m_displayList[selectedID].m_position = tempPos;
-		break;
-	case InputCommands::Right:
-		tempPos += m_camera.GetRightVector() * moveSpeed;
-		tempPos.y = objectInitialYPosition;
-		m_displayList[selectedID].m_position = tempPos;
-		break;
-	case InputCommands::Left:
-		tempPos -= m_camera.GetRightVector() * moveSpeed;
-		tempPos.y = objectInitialYPosition;
-		m_displayList[selectedID].m_position = tempPos;
-		break;
-	case InputCommands::Up:
-		m_displayList[selectedID].m_position.y += moveSpeed;
-		break;
-	case InputCommands::Down:
-		m_displayList[selectedID].m_position.y -= moveSpeed;
-		break;
-	case InputCommands::RotDown:
-		//how would i make it move in the cameras direction
-		//m_camOrientation.x -= m_camRotRate;
-		m_displayList[selectedID].m_orientation.x -= m_camera.GetOrientation().x * moveSpeed;
-		break;
-	default:
-		break;
+		Vector3 tempPos = m_displayList[element].m_position;
+		float objectInitialYPosition = m_displayList[element].m_position.y;
+		float moveSpeed = 0.1;
+
+		switch (moveDirection)
+		{
+		case InputCommands::Forward:
+			tempPos -= m_camera.GetLookAt() * moveSpeed;
+			tempPos.y = objectInitialYPosition;
+			m_displayList[element].m_position = tempPos;
+			break;
+		case InputCommands::Backward:
+			tempPos += m_camera.GetLookAt() * moveSpeed;
+			tempPos.y = objectInitialYPosition;
+			m_displayList[element].m_position = tempPos;
+			break;
+		case InputCommands::Right:
+			tempPos += m_camera.GetRightVector() * moveSpeed;
+			tempPos.y = objectInitialYPosition;
+			m_displayList[element].m_position = tempPos;
+			break;
+		case InputCommands::Left:
+			tempPos -= m_camera.GetRightVector() * moveSpeed;
+			tempPos.y = objectInitialYPosition;
+			m_displayList[element].m_position = tempPos;
+			break;
+		case InputCommands::Up:
+			m_displayList[element].m_position.y += moveSpeed;
+			break;
+		case InputCommands::Down:
+			m_displayList[element].m_position.y -= moveSpeed;
+			break;
+		case InputCommands::RotDown:
+			//how would i make it move in the cameras direction
+			//m_camOrientation.x -= m_camRotRate;
+			m_displayList[element].m_orientation.x -= m_camera.GetOrientation().x * moveSpeed;
+			break;
+		default:
+			break;
+		}
 	}
 }
 
@@ -722,16 +723,22 @@ void Game::ObjectHighlight(int selectedID)
 	
 }
 
-void Game::ScaleUPAndDown(bool scaleUpOrDown, int selectedID)
+void Game::ScaleUPAndDown(bool scaleUpOrDown, std::vector<int> selectedIDs)
 {
 	Vector3 scaleParam = Vector3(0.1, 0.1, 0.1);
 	if (scaleUpOrDown)
 	{
-		m_displayList[selectedID].m_scale = XMVectorAdd(m_displayList[selectedID].m_scale, scaleParam);
+		for (auto& element : selectedIDs)
+		{
+			m_displayList[element].m_scale = XMVectorAdd(m_displayList[element].m_scale, scaleParam);
+		}
 	}
 	else
 	{
-		m_displayList[selectedID].m_scale = XMVectorSubtract(m_displayList[selectedID].m_scale, scaleParam);
+		for (auto& element : selectedIDs)
+		{
+			m_displayList[element].m_scale = XMVectorSubtract(m_displayList[element].m_scale, scaleParam);
+		}
 	}
 }
 
