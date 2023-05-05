@@ -298,7 +298,11 @@ void Game::Render()
 	context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
 	context->OMSetDepthStencilState(m_states->DepthDefault(),0);
 	context->RSSetState(m_states->CullNone());
-//	context->RSSetState(m_states->Wireframe());		//uncomment for wireframe
+	if (isTerrainWireframe)
+	{
+		context->RSSetState(m_states->Wireframe());		//uncomment for wireframe
+	}
+		
 
 	//Render the batch,  This is handled in the Display chunk becuase it has the potential to get complex
 	m_displayChunk.RenderBatch(m_deviceResources);
@@ -835,6 +839,14 @@ void Game::ScaleUPAndDown(bool scaleUpOrDown, std::vector<int> selectedIDs)
 		{
 			m_displayList[element].m_scale = XMVectorSubtract(m_displayList[element].m_scale, scaleParam);
 		}
+	}
+}
+
+void Game::ObjectWireframe(std::vector<int> selectedIDs)
+{
+	for (auto element : selectedIDs)
+	{
+		m_displayList[element].m_wireframe = !m_displayList[element].m_wireframe;
 	}
 }
 

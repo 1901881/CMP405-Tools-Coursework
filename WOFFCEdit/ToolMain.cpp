@@ -278,6 +278,16 @@ void ToolMain::onActionSaveTerrain()
 	m_d3dRenderer.SaveDisplayChunk(&m_chunk);
 }
 
+void ToolMain::TerrainWireframe()
+{
+	m_d3dRenderer.isTerrainWireframe = !m_d3dRenderer.isTerrainWireframe;
+}
+
+void ToolMain::ObjectWireframe()
+{
+	m_d3dRenderer.ObjectWireframe(m_multiSelectIDs);
+}
+
 void ToolMain::Tick(MSG *msg)
 {
 	//do we have a selection

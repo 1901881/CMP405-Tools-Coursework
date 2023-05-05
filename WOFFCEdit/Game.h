@@ -68,6 +68,9 @@ public:
 	void MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
 	void ObjectHighlightUpdate(std::vector<int> selectedIDs);
 
+	bool isTerrainWireframe = false;
+	void ObjectWireframe(std::vector<int> selectedIDs);
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif

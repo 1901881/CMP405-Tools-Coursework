@@ -212,6 +212,8 @@
     <ResourceCompile Include="Win32SimpleSample.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="object_wireframe.bmp" />
+    <Image Include="terrain_wireframe.bmp" />
     <Image Include="toolbar1.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

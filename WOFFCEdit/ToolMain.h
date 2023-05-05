@@ -24,6 +24,9 @@ public: //methods
 	afx_msg	void	onActionSave();											//save the current chunk
 	afx_msg void	onActionSaveTerrain();									//save chunk geometry
 
+	void TerrainWireframe();
+	void ObjectWireframe();
+
 	void	Tick(MSG *msg);
 	void	UpdateInput(MSG *msg);
 
