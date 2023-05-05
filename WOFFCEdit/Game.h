@@ -66,7 +66,7 @@ public:
 	void PasteObject(std::vector<int> copiedIDs);
 	void ScaleUPAndDown(bool scaleUpOrDown, std::vector<int> selectedIDs);
 	void MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
-	void ObjectHighlight(std::vector<int> selectedIDs);
+	void ObjectHighlightUpdate(std::vector<int> selectedIDs);
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();

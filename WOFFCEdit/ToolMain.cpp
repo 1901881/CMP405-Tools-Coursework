@@ -539,17 +539,16 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.rotLeft = false;
 
-	if (m_keyArray['M'])
-	{
-		m_toolInputCommands.multiSelect = true;
-	}
-	else m_toolInputCommands.multiSelect = false;
-
 	if (m_keyArray[17])
 	{
+		m_toolInputCommands.multiSelect = true;
 		m_toolInputCommands.ctrl_Down = true;
 	}
-	else m_toolInputCommands.ctrl_Down = false;
+	else
+	{
+		m_toolInputCommands.multiSelect = false;
+		m_toolInputCommands.ctrl_Down = false;
+	}
 	
 
 	if (m_keyArray[67])

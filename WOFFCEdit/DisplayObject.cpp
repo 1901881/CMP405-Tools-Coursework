@@ -29,6 +29,7 @@ DisplayObject::DisplayObject()
 DisplayObject::~DisplayObject()
 {
 //	delete m_texture_diffuse;
+	m_texture_diffuse = NULL;
 }
 
 void DisplayObject::ObjectHighlight(bool highlightState)
@@ -56,11 +57,11 @@ void DisplayObject::ObjectHighlight(bool highlightState)
 
 	m_model->UpdateEffects([&](DirectX::IEffect* effect)
 		{
-			auto highlightFog = dynamic_cast<DirectX::IEffectFog*>(effect);
-	if (highlightFog)
-	{
-		highlightFog->SetFogEnabled(highlightState);
-		highlightFog->SetFogColor(DirectX::Colors::Yellow);
-	}
+			highlightFog = dynamic_cast<DirectX::IEffectFog*>(effect);
+			if (highlightFog)
+			{
+				highlightFog->SetFogEnabled(highlightState);
+				highlightFog->SetFogColor(DirectX::Colors::Yellow);
+			}
 		});
 }

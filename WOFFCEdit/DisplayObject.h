@@ -29,6 +29,10 @@ public:
 	float	m_light_linear;
 	float	m_light_quadratic;
 
+	DirectX::IEffectFog* highlightFog;
+	std::string model_path;
+	std::string tex_diffuse_path;
+
 };
 
 

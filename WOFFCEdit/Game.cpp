@@ -288,7 +288,7 @@ void Game::Render()
 
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
-		m_displayList[i].m_model->Draw(context, *m_states, local, m_view, m_projection, false);	//last variable in draw,  make TRUE for wireframe
+		m_displayList[i].m_model->Draw(context, *m_states, local, m_view, m_projection, m_displayList[i].m_wireframe);	//last variable in draw,  make TRUE for wireframe
 
 		m_deviceResources->PIXEndEvent();
 	}
@@ -306,7 +306,7 @@ void Game::Render()
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
-	std::wstring var = L"Cam X: " + std::to_wstring(m_camPosition.x) + L"Cam Z: " + std::to_wstring(m_camPosition.z);
+	std::wstring var = L"Cam X: " + std::to_wstring(m_camera.GetPosition().x) + L"Cam Y: " + std::to_wstring(m_camera.GetPosition().y) + L"Cam Z: " + std::to_wstring(m_camera.GetPosition().z);
 	m_font->DrawString(m_sprites.get(), var.c_str(), XMFLOAT2(100, 10), Colors::Yellow);
 	m_sprites->End();
 
@@ -490,6 +490,9 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		newDisplayObject.m_light_linear		= SceneGraph->at(i).light_linear;
 		newDisplayObject.m_light_quadratic	= SceneGraph->at(i).light_quadratic;
 		
+		newDisplayObject.tex_diffuse_path = SceneGraph->at(i).tex_diffuse_path;
+		newDisplayObject.model_path = SceneGraph->at(i).model_path;
+
 		m_displayList.push_back(newDisplayObject);
 		
 	}
@@ -562,40 +565,56 @@ std::vector<int> Game::MousePicking()
 		}
 	}
 
-	if (selectedID != -1)
+	if (selectedID != -1)//Checks if an object is selected
 	{
-		if (multiSelectActive)
+		//if m is held down push back the previous selection and add the new selection to the front of the vector
+		if (multiSelectActive && !multiSelect.empty())
 		{
-			if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
+			if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {
+			//so if it does contain 
+				//gotta take out the id int from the vector 
+				//so loop through the vector
+				std::vector<int> temp;
+				for (auto& element : multiSelect) {
+					if (element != selectedID)
+					{
+						temp.push_back(element);
+					}
+				}
+				multiSelect = temp;
+
+			}//does contain
 			else { //does not contain
-				multiSelect.push_back(previousSelectedID);
+				multiSelect.push_back(multiSelect.front());
 				multiSelect.front() = selectedID;
 			}
 		}
-
-		if (multiSelect.empty())
-		{
-
-			multiSelect.push_back(selectedID);
-		}
-		else
-			multiSelect.front() = selectedID;
 
 		//if multi slect is not active and mouse hit object not within multiselect clear it
 		if (!multiSelectActive)
 		{
 			for (auto& element : multiSelect) {
 
-				if (element == selectedID)
+				if (element != selectedID)
 				{
 					multiSelect.clear();
 					multiSelect.push_back(selectedID);
 				}
 			}
+
+			//Acts as original mouse picking
+			if (multiSelect.empty())//if empty add the selected ID
+			{
+
+				multiSelect.push_back(selectedID);
+			}
+			else//if not empty the first item in the vector should display the new selection
+				multiSelect.front() = selectedID;
 		}
 
 		//If a object is selected
-		ObjectHighlight(multiSelect);
+		ObjectHighlightUpdate(multiSelect);
+
 		if (selectedID == previousSelectedID)
 			selectCounter++;
 		else
@@ -610,13 +629,6 @@ std::vector<int> Game::MousePicking()
 
 
 		previousSelectedID = selectedID;
-
-		//if we got a hit.  return it.  
-		//return selectedID;
-
-
-
-		//multiselect fron highlight
 	}
 	return multiSelect;
 
@@ -652,12 +664,81 @@ void Game::Arcball(int selectedObjectID)
 
 void Game::PasteObject(std::vector<int> copiedIDs)
 {
+	auto device = m_deviceResources->GetD3DDevice();
+	auto devicecontext = m_deviceResources->GetD3DDeviceContext();
 	//plays more than once
 	for (auto& element : copiedIDs)
 	{
-		m_displayList.push_back(m_displayList[element]);
-		m_displayList[m_displayList.size() - 1].m_position = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
+		//m_displayList.push_back(m_displayList[element]);
+		//m_displayList[m_displayList.size() - 1].m_ID = m_displayList.size();
+		//m_displayList[m_displayList.size() - 1].m_position = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
+
+		Vector3 newObjectPosition = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
+
+		//create a temp display object that we will populate then append to the display list.
+		DisplayObject newDisplayObject;
+
+		//load model
+		std::wstring modelwstr = StringToWCHART(m_displayList[element].model_path);							//convect string to Wchar
+		newDisplayObject.m_model = Model::CreateFromCMO(device, modelwstr.c_str(), *m_fxFactory, true);	//get DXSDK to load model "False" for LH coordinate system (maya)
+
+		//Load Texture
+		std::wstring texturewstr = StringToWCHART(m_displayList[element].tex_diffuse_path);								//convect string to Wchar
+		HRESULT rs;
+		rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
+
+		//if texture fails.  load error default
+		if (rs)
+		{
+			CreateDDSTextureFromFile(device, L"database/data/Error.dds", nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
+		}
+
+		//apply new texture to models effect
+		newDisplayObject.m_model->UpdateEffects([&](IEffect* effect) //This uses a Lambda function,  if you dont understand it: Look it up.
+			{
+				auto lights = dynamic_cast<BasicEffect*>(effect);
+		if (lights)
+		{
+			lights->SetTexture(newDisplayObject.m_texture_diffuse);
+		}
+			});
+
+		//set position
+		newDisplayObject.m_position.x = m_displayList[element].m_position.x;
+		newDisplayObject.m_position.y = m_displayList[element].m_position.y + 3;
+		newDisplayObject.m_position.z = m_displayList[element].m_position.z;
+
+		//setorientation
+		newDisplayObject.m_orientation.x = m_displayList[element].m_orientation.x;
+		newDisplayObject.m_orientation.y = m_displayList[element].m_orientation.y;
+		newDisplayObject.m_orientation.z = m_displayList[element].m_orientation.z;
+
+		//set scale
+		newDisplayObject.m_scale.x = m_displayList[element].m_scale.x;
+		newDisplayObject.m_scale.y = m_displayList[element].m_scale.y;
+		newDisplayObject.m_scale.z = m_displayList[element].m_scale.z;
+
+		//set wireframe / render flags
+		newDisplayObject.m_render = m_displayList[element].m_render;
+		newDisplayObject.m_wireframe = m_displayList[element].m_wireframe;
+		//newDisplayObject.m_wireframe = true;
+
+		newDisplayObject.m_light_type = m_displayList[element].m_light_type;
+		newDisplayObject.m_light_diffuse_r = m_displayList[element].m_light_diffuse_r;
+		newDisplayObject.m_light_diffuse_g = m_displayList[element].m_light_diffuse_g;
+		newDisplayObject.m_light_diffuse_b = m_displayList[element].m_light_diffuse_b;
+		newDisplayObject.m_light_specular_r = m_displayList[element].m_light_specular_r;
+		newDisplayObject.m_light_specular_g = m_displayList[element].m_light_specular_g;
+		newDisplayObject.m_light_specular_b = m_displayList[element].m_light_specular_b;
+		newDisplayObject.m_light_spot_cutoff = m_displayList[element].m_light_spot_cutoff;
+		newDisplayObject.m_light_constant = m_displayList[element].m_light_constant;
+		newDisplayObject.m_light_linear = m_displayList[element].m_light_linear;
+		newDisplayObject.m_light_quadratic = m_displayList[element].m_light_quadratic;
+
+		m_displayList.push_back(newDisplayObject);
 	}
+
+
 }
 
 void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection)
@@ -665,6 +746,8 @@ void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection m
 	for (auto& element : copiedIDs)
 	{
 		Vector3 tempPos = m_displayList[element].m_position;
+		Vector3 tempRot = m_displayList[element].m_orientation;
+		Vector3 savedRot = m_displayList[element].m_orientation;
 		float objectInitialYPosition = m_displayList[element].m_position.y;
 		float moveSpeed = 0.1;
 
@@ -699,7 +782,19 @@ void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection m
 		case InputCommands::RotDown:
 			//how would i make it move in the cameras direction
 			//m_camOrientation.x -= m_camRotRate;
-			m_displayList[element].m_orientation.x -= m_camera.GetOrientation().x * moveSpeed;
+			//m_displayList[element].m_orientation.x += m_camera.GetLookAt().x * moveSpeed;
+			m_displayList[element].m_orientation.x += moveSpeed *10;
+			break;
+		case InputCommands::RotUp: 
+			m_displayList[element].m_orientation.x -= moveSpeed * 10;
+			break;
+		case InputCommands::RotLeft:
+			//m_displayList[element].m_orientation.y -= m_camera.GetOrientation().x * moveSpeed;
+			m_displayList[element].m_orientation.y += moveSpeed * 10;
+			break;
+		case InputCommands::RotRight:
+			//m_displayList[element].m_orientation.y += m_camera.GetOrientation().x * moveSpeed;
+			m_displayList[element].m_orientation.y -= moveSpeed * 10;
 			break;
 		default:
 			break;
@@ -707,7 +802,7 @@ void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection m
 	}
 }
 
-void Game::ObjectHighlight(std::vector<int> selectedIDs)
+void Game::ObjectHighlightUpdate(std::vector<int> selectedIDs)
 {
 	//clear highlight
 	if (!m_displayList.empty())

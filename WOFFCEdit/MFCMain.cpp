@@ -95,7 +95,7 @@ int MFCMain::Run()
 					std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(result.str());
 				wideString.erase(wideString.size() - 2);
 
-				std::wstring statusString = L"Selected Object: " + wideString;
+				std::wstring statusString = L"Selected Objects: " + wideString;
 				//statusString.erase(1);
 				
 
