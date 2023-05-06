@@ -193,15 +193,57 @@ void ToolMain::onActionSave()
 	sqlite3_stmt *pResults;								//results of the query
 	
 
+	
+
 	//OBJECTS IN THE WORLD Delete them all
 	//prepare SQL Text
 	sqlCommand = "DELETE FROM Objects";	 //will delete the whole object table.   Slightly risky but hey.
 	rc = sqlite3_prepare_v2(m_databaseConnection, sqlCommand, -1, &pResults, 0);
 	sqlite3_step(pResults);
 
+	//Trying to add object saving
+	std::vector<DisplayObject> temp = m_d3dRenderer.GetDisplayList();
+	int numObjects = m_sceneGraph.size();	//Loop thru the scengraph.
+	for (int i = 0; i < numObjects; i++)
+	{
+		//set position
+		m_sceneGraph.at(i).posX = temp[i].m_position.x;
+		m_sceneGraph.at(i).posY = temp[i].m_position.y;
+		m_sceneGraph.at(i).posZ = temp[i].m_position.z;
+
+		//setorientation
+		m_sceneGraph.at(i).rotX = temp[i].m_orientation.x;
+		m_sceneGraph.at(i).rotY = temp[i].m_orientation.y;
+		m_sceneGraph.at(i).rotZ = temp[i].m_orientation.z;
+
+		//set scale
+		m_sceneGraph.at(i).scaX = temp[i].m_scale.x;
+		m_sceneGraph.at(i).scaY = temp[i].m_scale.y;
+		m_sceneGraph.at(i).scaZ = temp[i].m_scale.z;
+
+		//set wireframe / render flags
+		m_sceneGraph.at(i).editor_render = temp[i].m_render;
+		m_sceneGraph.at(i).editor_wireframe = temp[i].m_wireframe;
+
+		m_sceneGraph.at(i).light_type = temp[i].m_light_type;
+		m_sceneGraph.at(i).light_diffuse_r = temp[i].m_light_diffuse_r;
+		m_sceneGraph.at(i).light_diffuse_g = temp[i].m_light_diffuse_g;
+		m_sceneGraph.at(i).light_diffuse_b = temp[i].m_light_diffuse_b;
+		m_sceneGraph.at(i).light_specular_r = temp[i].m_light_specular_r;
+		m_sceneGraph.at(i).light_specular_g = temp[i].m_light_specular_g;
+		m_sceneGraph.at(i).light_specular_b = temp[i].m_light_specular_b;
+		m_sceneGraph.at(i).light_spot_cutoff = temp[i].m_light_spot_cutoff;
+		m_sceneGraph.at(i).light_constant = temp[i].m_light_constant;
+		m_sceneGraph.at(i).light_linear = temp[i].m_light_linear;
+		m_sceneGraph.at(i).light_quadratic = temp[i].m_light_quadratic;
+
+		m_sceneGraph.at(i).tex_diffuse_path = temp[i].tex_diffuse_path;
+		m_sceneGraph.at(i).model_path = temp[i].model_path;
+	}
+
 	//Populate with our new objects
 	std::wstring sqlCommand2;
-	int numObjects = m_sceneGraph.size();	//Loop thru the scengraph.
+	numObjects = m_sceneGraph.size();	//Loop thru the scengraph.
 
 	for (int i = 0; i < numObjects; i++)
 	{

@@ -71,6 +71,8 @@ public:
 	bool isTerrainWireframe = false;
 	void ObjectWireframe(std::vector<int> selectedIDs);
 
+	std::vector<DisplayObject> GetDisplayList() { return m_displayList; }
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif
