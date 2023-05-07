@@ -23,6 +23,9 @@ public: //methods
 	void	onActionLoad();													//load the current chunk
 	afx_msg	void	onActionSave();											//save the current chunk
 	afx_msg void	onActionSaveTerrain();									//save chunk geometry
+	void ObjectMovementMode();
+	void ObjectRotationMode();
+	void ObjectScalingMode();
 
 	void TerrainWireframe();
 	void ObjectWireframe();

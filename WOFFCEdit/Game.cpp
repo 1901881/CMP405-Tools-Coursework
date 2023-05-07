@@ -751,61 +751,78 @@ void Game::PasteObject(std::vector<int> copiedIDs)
 
 void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection)
 {
-	for (auto& element : copiedIDs)
+	if (ObjectMovementMode)
 	{
-		Vector3 tempPos = m_displayList[element].m_position;
-		Vector3 tempRot = m_displayList[element].m_orientation;
-		Vector3 savedRot = m_displayList[element].m_orientation;
-		float objectInitialYPosition = m_displayList[element].m_position.y;
-		float moveSpeed = 0.1;
-
-		switch (moveDirection)
+		for (auto& element : copiedIDs)
 		{
-		case InputCommands::Forward:
-			tempPos -= m_camera.GetLookAt() * moveSpeed;
-			tempPos.y = objectInitialYPosition;
-			m_displayList[element].m_position = tempPos;
-			break;
-		case InputCommands::Backward:
-			tempPos += m_camera.GetLookAt() * moveSpeed;
-			tempPos.y = objectInitialYPosition;
-			m_displayList[element].m_position = tempPos;
-			break;
-		case InputCommands::Right:
-			tempPos += m_camera.GetRightVector() * moveSpeed;
-			tempPos.y = objectInitialYPosition;
-			m_displayList[element].m_position = tempPos;
-			break;
-		case InputCommands::Left:
-			tempPos -= m_camera.GetRightVector() * moveSpeed;
-			tempPos.y = objectInitialYPosition;
-			m_displayList[element].m_position = tempPos;
-			break;
-		case InputCommands::Up:
-			m_displayList[element].m_position.y += moveSpeed;
-			break;
-		case InputCommands::Down:
-			m_displayList[element].m_position.y -= moveSpeed;
-			break;
-		case InputCommands::RotDown:
-			//how would i make it move in the cameras direction
-			//m_camOrientation.x -= m_camRotRate;
-			//m_displayList[element].m_orientation.x += m_camera.GetLookAt().x * moveSpeed;
-			m_displayList[element].m_orientation.x += moveSpeed *10;
-			break;
-		case InputCommands::RotUp: 
-			m_displayList[element].m_orientation.x -= moveSpeed * 10;
-			break;
-		case InputCommands::RotLeft:
-			//m_displayList[element].m_orientation.y -= m_camera.GetOrientation().x * moveSpeed;
-			m_displayList[element].m_orientation.y += moveSpeed * 10;
-			break;
-		case InputCommands::RotRight:
-			//m_displayList[element].m_orientation.y += m_camera.GetOrientation().x * moveSpeed;
-			m_displayList[element].m_orientation.y -= moveSpeed * 10;
-			break;
-		default:
-			break;
+			Vector3 tempPos = m_displayList[element].m_position;
+			float objectInitialYPosition = m_displayList[element].m_position.y;
+			float moveSpeed = 0.1;
+
+			switch (moveDirection)
+			{
+			case InputCommands::Forward:
+				tempPos -= m_camera.GetLookAt() * moveSpeed;
+				tempPos.y = objectInitialYPosition;
+				m_displayList[element].m_position = tempPos;
+				break;
+			case InputCommands::Backward:
+				tempPos += m_camera.GetLookAt() * moveSpeed;
+				tempPos.y = objectInitialYPosition;
+				m_displayList[element].m_position = tempPos;
+				break;
+			case InputCommands::Right:
+				tempPos += m_camera.GetRightVector() * moveSpeed;
+				tempPos.y = objectInitialYPosition;
+				m_displayList[element].m_position = tempPos;
+				break;
+			case InputCommands::Left:
+				tempPos -= m_camera.GetRightVector() * moveSpeed;
+				tempPos.y = objectInitialYPosition;
+				m_displayList[element].m_position = tempPos;
+				break;
+			case InputCommands::Up:
+				m_displayList[element].m_position.y += moveSpeed;
+				break;
+			case InputCommands::Down:
+				m_displayList[element].m_position.y -= moveSpeed;
+				break;
+			default:
+				break;
+			}
+		}
+	}
+}
+
+void Game::RotateObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection)
+{
+	if (ObjectRotationMode)
+	{
+		for (auto& element : copiedIDs)
+		{
+			float moveSpeed = 1;
+			switch (moveDirection)
+			{
+			case InputCommands::RotDown:
+				//how would i make it move in the cameras direction
+				//m_camOrientation.x -= m_camRotRate;
+				//m_displayList[element].m_orientation.x += m_camera.GetLookAt().x * moveSpeed;
+				m_displayList[element].m_orientation.x += moveSpeed * 10;
+				break;
+			case InputCommands::RotUp:
+				m_displayList[element].m_orientation.x -= moveSpeed * 10;
+				break;
+			case InputCommands::RotLeft:
+				//m_displayList[element].m_orientation.y -= m_camera.GetOrientation().x * moveSpeed;
+				m_displayList[element].m_orientation.y += moveSpeed * 10;
+				break;
+			case InputCommands::RotRight:
+				//m_displayList[element].m_orientation.y += m_camera.GetOrientation().x * moveSpeed;
+				m_displayList[element].m_orientation.y -= moveSpeed * 10;
+				break;
+			default:
+				break;
+			}
 		}
 	}
 }
@@ -829,37 +846,40 @@ void Game::ObjectHighlightUpdate(std::vector<int> selectedIDs)
 
 void Game::ScaleUPAndDown(bool scaleUpOrDown, InputCommands::ScaleDirection scaleDirection, std::vector<int> selectedIDs)
 {
-	Vector3 objectScaleTemp;
-	Vector3 scaleParam = Vector3(0.1, 0.1, 0.1);
-	for (auto& element : selectedIDs)
+	if (ObjectScalingMode)
 	{
-		objectScaleTemp = m_displayList[element].m_scale;
+		Vector3 objectScaleTemp;
+		Vector3 scaleParam = Vector3(0.1, 0.1, 0.1);
+		for (auto& element : selectedIDs)
+		{
+			objectScaleTemp = m_displayList[element].m_scale;
 
-		if (scaleUpOrDown)
-		{
-			//m_displayList[element].m_scale = XMVectorAdd(m_displayList[element].m_scale, scaleParam);
-			objectScaleTemp = XMVectorAdd(objectScaleTemp, scaleParam);
-		}
-		else
-		{
-			//m_displayList[element].m_scale = XMVectorSubtract(m_displayList[element].m_scale, scaleParam);
-			objectScaleTemp = XMVectorSubtract(objectScaleTemp, scaleParam);
-		}
+			if (scaleUpOrDown)
+			{
+				//m_displayList[element].m_scale = XMVectorAdd(m_displayList[element].m_scale, scaleParam);
+				objectScaleTemp = XMVectorAdd(objectScaleTemp, scaleParam);
+			}
+			else
+			{
+				//m_displayList[element].m_scale = XMVectorSubtract(m_displayList[element].m_scale, scaleParam);
+				objectScaleTemp = XMVectorSubtract(objectScaleTemp, scaleParam);
+			}
 
-		switch (scaleDirection)
-		{
-		case InputCommands::Whole:
-			m_displayList[element].m_scale = objectScaleTemp;
-			break;
-		case InputCommands::X:
-			m_displayList[element].m_scale.x = objectScaleTemp.x;
-			break;
-		case InputCommands::Y:
-			m_displayList[element].m_scale.y = objectScaleTemp.y;
-			break;
-		case InputCommands::Z:
-			m_displayList[element].m_scale.z = objectScaleTemp.z;
-			break;
+			switch (scaleDirection)
+			{
+			case InputCommands::Whole:
+				m_displayList[element].m_scale = objectScaleTemp;
+				break;
+			case InputCommands::X:
+				m_displayList[element].m_scale.x = objectScaleTemp.x;
+				break;
+			case InputCommands::Y:
+				m_displayList[element].m_scale.y = objectScaleTemp.y;
+				break;
+			case InputCommands::Z:
+				m_displayList[element].m_scale.z = objectScaleTemp.z;
+				break;
+			}
 		}
 	}
 }

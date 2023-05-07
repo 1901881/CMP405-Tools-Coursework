@@ -9,6 +9,9 @@ BEGIN_MESSAGE_MAP(MFCMain, CWinApp)
 	ON_COMMAND(ID_BUTTON40001,	&MFCMain::ToolBarButton1)
 	ON_COMMAND(ID_BUTTON40006,	&MFCMain::TerrainWireframeButton)
 	ON_COMMAND(ID_BUTTON40007,	&MFCMain::ObjectWireframeButton)
+	ON_COMMAND(ID_BUTTON40008,	&MFCMain::ObjectScalingButton)
+	ON_COMMAND(ID_BUTTON40009,	&MFCMain::ObjectMovementButton)
+	ON_COMMAND(ID_BUTTON40010,	&MFCMain::ObjectRotationButton)
 	ON_UPDATE_COMMAND_UI(ID_INDICATOR_TOOL, &CMyFrame::OnUpdatePage)
 END_MESSAGE_MAP()
 
@@ -148,6 +151,21 @@ void MFCMain::TerrainWireframeButton()
 void MFCMain::ObjectWireframeButton()
 {
 	m_ToolSystem.ObjectWireframe();
+}
+
+void MFCMain::ObjectMovementButton()
+{
+	m_ToolSystem.ObjectMovementMode();
+}
+
+void MFCMain::ObjectRotationButton()
+{
+	m_ToolSystem.ObjectRotationMode();
+}
+
+void MFCMain::ObjectScalingButton()
+{
+	m_ToolSystem.ObjectScalingMode();
 }
 
 MFCMain::MFCMain()

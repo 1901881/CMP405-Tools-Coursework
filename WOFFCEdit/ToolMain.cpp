@@ -327,6 +327,30 @@ void ToolMain::ObjectWireframe()
 	m_d3dRenderer.ObjectWireframe(m_multiSelectIDs);
 }
 
+void ToolMain::ObjectMovementMode()
+{
+	m_d3dRenderer.ObjectMovementMode = !m_d3dRenderer.ObjectMovementMode;
+
+	m_d3dRenderer.ObjectRotationMode = false;
+	m_d3dRenderer.ObjectScalingMode = false;
+}
+
+void ToolMain::ObjectRotationMode()
+{
+	m_d3dRenderer.ObjectRotationMode = !m_d3dRenderer.ObjectRotationMode;
+
+	m_d3dRenderer.ObjectMovementMode = false;
+	m_d3dRenderer.ObjectScalingMode = false;
+}
+
+void ToolMain::ObjectScalingMode()
+{
+	m_d3dRenderer.ObjectScalingMode = !m_d3dRenderer.ObjectScalingMode;
+
+	m_d3dRenderer.ObjectRotationMode = false;
+	m_d3dRenderer.ObjectMovementMode = false;
+}
+
 void ToolMain::Tick(MSG *msg)
 {
 	//do we have a selection
@@ -407,21 +431,25 @@ void ToolMain::Tick(MSG *msg)
 	if (m_toolInputCommands.i_Down)
 	{
 		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::Forward);
+		m_d3dRenderer.RotateObject(m_multiSelectIDs, InputCommands::RotDown);
 		m_toolInputCommands.i_Down = false;
 	}
 	if (m_toolInputCommands.k_Down)
 	{
 		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::Backward);
+		m_d3dRenderer.RotateObject(m_multiSelectIDs, InputCommands::RotUp);
 		m_toolInputCommands.k_Down = false;
 	}
 	if (m_toolInputCommands.l_Down)
 	{
 		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::Right);
+		m_d3dRenderer.RotateObject(m_multiSelectIDs, InputCommands::RotRight);
 		m_toolInputCommands.l_Down = false;
 	}
 	if (m_toolInputCommands.j_Down)
 	{
 		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::Left);
+		m_d3dRenderer.RotateObject(m_multiSelectIDs, InputCommands::RotLeft);
 		m_toolInputCommands.j_Down = false;
 	}
 	if (m_toolInputCommands.o_Down)
@@ -436,26 +464,26 @@ void ToolMain::Tick(MSG *msg)
 	}
 
 	//Object Rotation
-	if (m_toolInputCommands.numPad8_Down)
-	{
-		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotDown);
-		m_toolInputCommands.numPad8_Down = false;
-	}
-	if (m_toolInputCommands.numPad4_Down)
-	{
-		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotLeft);
-		m_toolInputCommands.numPad4_Down = false;
-	}
-	if (m_toolInputCommands.numPad2_Down)
-	{
-		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotUp);
-		m_toolInputCommands.numPad2_Down = false;
-	}
-	if (m_toolInputCommands.numPad6_Down)
-	{
-		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotRight);
-		m_toolInputCommands.numPad6_Down = false;
-	}
+	//if (m_toolInputCommands.numPad8_Down)
+	//{
+	//	m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotDown);
+	//	m_toolInputCommands.numPad8_Down = false;
+	//}
+	//if (m_toolInputCommands.numPad4_Down)
+	//{
+	//	m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotLeft);
+	//	m_toolInputCommands.numPad4_Down = false;
+	//}
+	//if (m_toolInputCommands.numPad2_Down)
+	//{
+	//	m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotUp);
+	//	m_toolInputCommands.numPad2_Down = false;
+	//}
+	//if (m_toolInputCommands.numPad6_Down)
+	//{
+	//	m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotRight);
+	//	m_toolInputCommands.numPad6_Down = false;
+	//}
 
 	if (m_toolInputCommands.alt_Down)
 		m_d3dRenderer.altDown = true;

@@ -66,6 +66,7 @@ public:
 	void PasteObject(std::vector<int> copiedIDs);
 	void ScaleUPAndDown(bool scaleUpOrDown, InputCommands::ScaleDirection scaleDirection, std::vector<int> selectedIDs);
 	void MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
+	void RotateObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
 	void ObjectHighlightUpdate(std::vector<int> selectedIDs);
 
 	bool isTerrainWireframe = false;
@@ -74,6 +75,9 @@ public:
 	std::vector<DisplayObject> GetDisplayList() { return m_displayList; }
 
 	bool altDown = false;
+	bool ObjectMovementMode = false;
+	bool ObjectRotationMode = false;
+	bool ObjectScalingMode = false;
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
