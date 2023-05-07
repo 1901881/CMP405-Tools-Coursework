@@ -42,6 +42,8 @@ struct InputCommands
 	bool mouseWheel_Down_Down;
 	bool mouseWheel_UP_Down;
 
+	bool alt_Down;
+
 	long mouseDX;
 	long mouseDY;
 

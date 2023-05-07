@@ -578,14 +578,18 @@ std::vector<int> Game::MousePicking()
 			//so if it does contain 
 				//gotta take out the id int from the vector 
 				//so loop through the vector
-				std::vector<int> temp;
-				for (auto& element : multiSelect) {
-					if (element != selectedID)
-					{
-						temp.push_back(element);
+				if(altDown)
+				{
+					std::vector<int> temp;
+					for (auto& element : multiSelect) {
+						if (element != selectedID)
+						{
+							temp.push_back(element);
+						}
 					}
+					multiSelect = temp;
 				}
-				multiSelect = temp;
+				
 
 			}//does contain
 			else { //does not contain

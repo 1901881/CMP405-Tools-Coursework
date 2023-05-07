@@ -191,9 +191,6 @@ void ToolMain::onActionSave()
 	char *sqlCommand;
 	char *ErrMSG = 0;
 	sqlite3_stmt *pResults;								//results of the query
-	
-
-	
 
 	//OBJECTS IN THE WORLD Delete them all
 	//prepare SQL Text
@@ -201,7 +198,7 @@ void ToolMain::onActionSave()
 	rc = sqlite3_prepare_v2(m_databaseConnection, sqlCommand, -1, &pResults, 0);
 	sqlite3_step(pResults);
 
-	//Trying to add object saving
+	//Loop through database and add objects in scene
 	std::vector<DisplayObject> temp = m_d3dRenderer.GetDisplayList();
 	int numObjects = m_sceneGraph.size();	//Loop thru the scengraph.
 	for (int i = 0; i < numObjects; i++)
@@ -459,6 +456,11 @@ void ToolMain::Tick(MSG *msg)
 		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotRight);
 		m_toolInputCommands.numPad6_Down = false;
 	}
+
+	if (m_toolInputCommands.alt_Down)
+		m_d3dRenderer.altDown = true;
+	else
+		m_d3dRenderer.altDown = false;
 	
 }
 
@@ -688,6 +690,11 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.numPad6_Down = false;
 
+	if (m_keyArray[18])
+	{
+		m_toolInputCommands.alt_Down = true;
+	}
+	else m_toolInputCommands.alt_Down = false;
 
 	//https://css-tricks.com/snippets/javascript/javascript-keycodes/
 

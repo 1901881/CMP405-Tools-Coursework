@@ -73,6 +73,8 @@ public:
 
 	std::vector<DisplayObject> GetDisplayList() { return m_displayList; }
 
+	bool altDown = false;
+
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
 #endif
