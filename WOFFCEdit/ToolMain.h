@@ -38,6 +38,7 @@ public:	//variables
 	std::vector<int> m_copiedIDs;								//ID of copied Selection
 	bool m_pastePlayedOnce = false;	
 	bool m_scrollPlayedOnce = false;	
+	InputCommands::ScaleDirection scaleDirection;
 
 private:	//methods
 	void	onContentAdded();

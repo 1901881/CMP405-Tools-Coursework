@@ -65,4 +65,12 @@ struct InputCommands
 		RotUp,
 		RotDown
 	};
+
+	enum ScaleDirection
+	{
+		Whole,
+		X,
+		Y,
+		Z
+	};
 };

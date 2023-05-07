@@ -827,21 +827,39 @@ void Game::ObjectHighlightUpdate(std::vector<int> selectedIDs)
 
 }
 
-void Game::ScaleUPAndDown(bool scaleUpOrDown, std::vector<int> selectedIDs)
+void Game::ScaleUPAndDown(bool scaleUpOrDown, InputCommands::ScaleDirection scaleDirection, std::vector<int> selectedIDs)
 {
+	Vector3 objectScaleTemp;
 	Vector3 scaleParam = Vector3(0.1, 0.1, 0.1);
-	if (scaleUpOrDown)
+	for (auto& element : selectedIDs)
 	{
-		for (auto& element : selectedIDs)
+		objectScaleTemp = m_displayList[element].m_scale;
+
+		if (scaleUpOrDown)
 		{
-			m_displayList[element].m_scale = XMVectorAdd(m_displayList[element].m_scale, scaleParam);
+			//m_displayList[element].m_scale = XMVectorAdd(m_displayList[element].m_scale, scaleParam);
+			objectScaleTemp = XMVectorAdd(objectScaleTemp, scaleParam);
 		}
-	}
-	else
-	{
-		for (auto& element : selectedIDs)
+		else
 		{
-			m_displayList[element].m_scale = XMVectorSubtract(m_displayList[element].m_scale, scaleParam);
+			//m_displayList[element].m_scale = XMVectorSubtract(m_displayList[element].m_scale, scaleParam);
+			objectScaleTemp = XMVectorSubtract(objectScaleTemp, scaleParam);
+		}
+
+		switch (scaleDirection)
+		{
+		case InputCommands::Whole:
+			m_displayList[element].m_scale = objectScaleTemp;
+			break;
+		case InputCommands::X:
+			m_displayList[element].m_scale.x = objectScaleTemp.x;
+			break;
+		case InputCommands::Y:
+			m_displayList[element].m_scale.y = objectScaleTemp.y;
+			break;
+		case InputCommands::Z:
+			m_displayList[element].m_scale.z = objectScaleTemp.z;
+			break;
 		}
 	}
 }

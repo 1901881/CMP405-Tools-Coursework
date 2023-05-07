@@ -389,7 +389,7 @@ void ToolMain::Tick(MSG *msg)
 	{
 		if (!m_scrollPlayedOnce)
 		{
-			m_d3dRenderer.ScaleUPAndDown(true, m_multiSelectIDs);
+			m_d3dRenderer.ScaleUPAndDown(true, scaleDirection, m_multiSelectIDs);
 			m_scrollPlayedOnce = true;
 		}
 		
@@ -398,7 +398,7 @@ void ToolMain::Tick(MSG *msg)
 	{
 		if (!m_scrollPlayedOnce)
 		{
-			m_d3dRenderer.ScaleUPAndDown(false, m_multiSelectIDs);
+			m_d3dRenderer.ScaleUPAndDown(false, scaleDirection, m_multiSelectIDs);
 			m_scrollPlayedOnce = true;
 		}
 	}
@@ -630,23 +630,31 @@ void ToolMain::UpdateInput(MSG * msg)
 	}
 	else m_toolInputCommands.i_Down = false;
 
+	scaleDirection = InputCommands::Whole;
+
 	if (m_keyArray[74])
 	{
 		m_toolInputCommands.j_Down = true;
+		scaleDirection = InputCommands::X;
 	}
-	else m_toolInputCommands.j_Down = false;
+	else
+		m_toolInputCommands.j_Down = false;
 
 	if (m_keyArray[75])
 	{
 		m_toolInputCommands.k_Down = true;
+		scaleDirection = InputCommands::Y;
 	}
 	else m_toolInputCommands.k_Down = false;
 
 	if (m_keyArray[76])
 	{
 		m_toolInputCommands.l_Down = true;
+		scaleDirection = InputCommands::Z;
 	}
 	else m_toolInputCommands.l_Down = false;
+
+	
 
 	// UO
 	if (m_keyArray[85])
