@@ -59,24 +59,53 @@ public:
 	std::vector<int> MousePicking();
 	RECT m_ScreenDimensions;
 	std::vector<int> multiSelect;
-	bool multiSelectActive = false;
+	
 
-	void Arcball(int selectedObjectID);
+	/**
+	 * @brief Paste copied objects - Iterate through copied objects creating a new object with the copied objects values and add to the display list
+	 * @param copiedIDs  - contains the the IDs of the copied objects
+	 */
 	void PasteObject(std::vector<int> copiedIDs);
-	void ScaleUPAndDown(bool scaleUpOrDown, InputCommands::ScaleDirection scaleDirection, std::vector<int> selectedIDs);
+
+	/**
+	 * @brief Iterates through selected objects and increases or descreases their scale
+	 * @param scaleUporDown  - True - scale up, False - scale down
+	 * @param scaleDirection  - controls the axis in which the object is scaled
+	 * @param selectedIDs  - contains the the IDs of the selected objects
+	 */
+	void ObjectScaling(bool scaleUpOrDown, InputCommands::ScaleDirection scaleDirection, std::vector<int> selectedIDs);
+	
 	void MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
+	
 	void RotateObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
+	
+	
 	void ObjectHighlightUpdate(std::vector<int> selectedIDs);
 
-	bool isTerrainWireframe = false;
+	
+
+	 /**
+	 * @brief Iterates through selected objects and turns on or off their wireframe mode
+	 * @param selectedIDs  - contains the the IDs of the selected objects
+	 */
 	void ObjectWireframe(std::vector<int> selectedIDs);
 
 	std::vector<DisplayObject> GetDisplayList() { return m_displayList; }
 
-	bool altDown = false;
-	bool ObjectMovementMode = false;
-	bool ObjectRotationMode = false;
-	bool ObjectScalingMode = false;
+	//Bool Setters
+	void setM_bIsTerrainWireframe(bool m_bIsTerrainWireframe) { this->m_bIsTerrainWireframe = m_bIsTerrainWireframe; }
+	void setM_bAltDown(bool m_bAltDown) { this->m_bAltDown = m_bAltDown; }
+	void setM_bObjectMovementMode(bool m_bObjectMovementMode) { this->m_bObjectMovementMode = m_bObjectMovementMode; }
+	void setM_bObjectRotationMode(bool m_bObjectRotationMode) { this->m_bObjectRotationMode = m_bObjectRotationMode; }
+	void setM_bObjectScalingMode(bool m_bObjectScalingMode) { this->m_bObjectScalingMode = m_bObjectScalingMode; }
+	void setM_bMultiSelectActive(bool m_bMultiSelectActive) { this->m_bMultiSelectActive = m_bMultiSelectActive; }
+
+	//Bool Getters
+	bool getM_bIsTerrainWireframe() { return m_bIsTerrainWireframe; }
+	bool getM_bObjectMovementMode() { return m_bObjectMovementMode; }
+	bool getM_bObjectRotationMode() { return m_bObjectRotationMode; }
+	bool getM_bObjectScalingMode() { return m_bObjectScalingMode; }
+
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
@@ -159,8 +188,12 @@ private:
 	int previousSelectedID = 0;
 	
 
-	//object movement
-	//float objectInitialYPosition;
+	bool m_bIsTerrainWireframe = false;//Controls the terrain wireframe mode
+	bool m_bAltDown = false;//Retrieves key data from tool main
+	bool m_bObjectMovementMode = false;//If true object can be moved
+	bool m_bObjectRotationMode = false;//If true object can be rotated
+	bool m_bObjectScalingMode = false;//If true object can be scaled
+	bool m_bMultiSelectActive = false;//True when Ctrl is down
 };
 
 std::wstring StringToWCHART(std::string s);

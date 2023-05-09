@@ -319,7 +319,7 @@ void ToolMain::onActionSaveTerrain()
 
 void ToolMain::TerrainWireframe()
 {
-	m_d3dRenderer.isTerrainWireframe = !m_d3dRenderer.isTerrainWireframe;
+	m_d3dRenderer.setM_bIsTerrainWireframe(!m_d3dRenderer.getM_bIsTerrainWireframe());
 }
 
 void ToolMain::ObjectWireframe()
@@ -329,26 +329,23 @@ void ToolMain::ObjectWireframe()
 
 void ToolMain::ObjectMovementMode()
 {
-	m_d3dRenderer.ObjectMovementMode = !m_d3dRenderer.ObjectMovementMode;
-
-	m_d3dRenderer.ObjectRotationMode = false;
-	m_d3dRenderer.ObjectScalingMode = false;
+	m_d3dRenderer.setM_bObjectMovementMode(!m_d3dRenderer.getM_bObjectMovementMode());
+	m_d3dRenderer.setM_bObjectRotationMode(false);
+	m_d3dRenderer.setM_bObjectScalingMode(false);
 }
 
 void ToolMain::ObjectRotationMode()
 {
-	m_d3dRenderer.ObjectRotationMode = !m_d3dRenderer.ObjectRotationMode;
-
-	m_d3dRenderer.ObjectMovementMode = false;
-	m_d3dRenderer.ObjectScalingMode = false;
+	m_d3dRenderer.setM_bObjectRotationMode(!m_d3dRenderer.getM_bObjectRotationMode());
+	m_d3dRenderer.setM_bObjectMovementMode(false);
+	m_d3dRenderer.setM_bObjectScalingMode(false);
 }
 
 void ToolMain::ObjectScalingMode()
 {
-	m_d3dRenderer.ObjectScalingMode = !m_d3dRenderer.ObjectScalingMode;
-
-	m_d3dRenderer.ObjectRotationMode = false;
-	m_d3dRenderer.ObjectMovementMode = false;
+	m_d3dRenderer.setM_bObjectScalingMode(!m_d3dRenderer.getM_bObjectScalingMode());
+	m_d3dRenderer.setM_bObjectMovementMode(false);
+	m_d3dRenderer.setM_bObjectRotationMode(false);
 }
 
 void ToolMain::Tick(MSG *msg)
@@ -374,12 +371,11 @@ void ToolMain::Tick(MSG *msg)
 	//multiselect
 	if (m_toolInputCommands.multiSelect)
 	{
-		m_d3dRenderer.multiSelectActive = true;
-		//m_toolInputCommands.multiSelect = false;
+		m_d3dRenderer.setM_bMultiSelectActive(true);
 	}
 	else if (!m_toolInputCommands.multiSelect)
 	{
-		m_d3dRenderer.multiSelectActive = false;
+		m_d3dRenderer.setM_bMultiSelectActive(false);
 	}
 
 	//arcball
@@ -413,7 +409,7 @@ void ToolMain::Tick(MSG *msg)
 	{
 		if (!m_scrollPlayedOnce)
 		{
-			m_d3dRenderer.ScaleUPAndDown(true, scaleDirection, m_multiSelectIDs);
+			m_d3dRenderer.ObjectScaling(true, scaleDirection, m_multiSelectIDs);
 			m_scrollPlayedOnce = true;
 		}
 		
@@ -422,7 +418,7 @@ void ToolMain::Tick(MSG *msg)
 	{
 		if (!m_scrollPlayedOnce)
 		{
-			m_d3dRenderer.ScaleUPAndDown(false, scaleDirection, m_multiSelectIDs);
+			m_d3dRenderer.ObjectScaling(false, scaleDirection, m_multiSelectIDs);
 			m_scrollPlayedOnce = true;
 		}
 	}
@@ -486,9 +482,9 @@ void ToolMain::Tick(MSG *msg)
 	//}
 
 	if (m_toolInputCommands.alt_Down)
-		m_d3dRenderer.altDown = true;
+		m_d3dRenderer.setM_bAltDown(true);
 	else
-		m_d3dRenderer.altDown = false;
+		m_d3dRenderer.setM_bAltDown(false);
 	
 }
 

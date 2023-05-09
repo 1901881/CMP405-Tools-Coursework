@@ -231,7 +231,7 @@ void Game::Render()
 	context->OMSetBlendState(m_states->Opaque(), nullptr, 0xFFFFFFFF);
 	context->OMSetDepthStencilState(m_states->DepthDefault(),0);
 	context->RSSetState(m_states->CullNone());
-	if (isTerrainWireframe)
+	if (m_bIsTerrainWireframe)
 	{
 		context->RSSetState(m_states->Wireframe());		//uncomment for wireframe
 	}
@@ -505,13 +505,13 @@ std::vector<int> Game::MousePicking()
 	if (selectedID != -1)//Checks if an object is selected
 	{
 		//if m is held down push back the previous selection and add the new selection to the front of the vector
-		if (multiSelectActive && !multiSelect.empty())
+		if (m_bMultiSelectActive && !multiSelect.empty())
 		{
 			if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {
 			//so if it does contain 
 				//gotta take out the id int from the vector 
 				//so loop through the vector
-				if(altDown)
+				if(m_bAltDown)
 				{
 					std::vector<int> temp;
 					for (auto& element : multiSelect) {
@@ -532,7 +532,7 @@ std::vector<int> Game::MousePicking()
 		}
 
 		//if multi slect is not active and mouse hit object not within multiselect clear it
-		if (!multiSelectActive)
+		if (!m_bMultiSelectActive)
 		{
 			for (auto& element : multiSelect) {
 
@@ -575,17 +575,14 @@ std::vector<int> Game::MousePicking()
 
 }
 
+
 void Game::PasteObject(std::vector<int> copiedIDs)
 {
 	auto device = m_deviceResources->GetD3DDevice();
 	auto devicecontext = m_deviceResources->GetD3DDeviceContext();
-	//plays more than once
+	
 	for (auto& element : copiedIDs)
 	{
-		//m_displayList.push_back(m_displayList[element]);
-		//m_displayList[m_displayList.size() - 1].m_ID = m_displayList.size();
-		//m_displayList[m_displayList.size() - 1].m_position = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
-
 		Vector3 newObjectPosition = Vector3(m_displayList[m_displayList.size() - 1].m_position.x, m_displayList[m_displayList.size() - 1].m_position.y + 5, m_displayList[m_displayList.size() - 1].m_position.z);
 
 		//create a temp display object that we will populate then append to the display list.
@@ -656,7 +653,7 @@ void Game::PasteObject(std::vector<int> copiedIDs)
 
 void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection)
 {
-	if (ObjectMovementMode)
+	if (m_bObjectMovementMode)
 	{
 		for (auto& element : copiedIDs)
 		{
@@ -699,7 +696,7 @@ void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection m
 
 void Game::RotateObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection)
 {
-	if (ObjectRotationMode)
+	if (m_bObjectRotationMode)
 	{
 		for (auto& element : copiedIDs)
 		{
@@ -747,28 +744,22 @@ void Game::ObjectHighlightUpdate(std::vector<int> selectedIDs)
 
 }
 
-void Game::ScaleUPAndDown(bool scaleUpOrDown, InputCommands::ScaleDirection scaleDirection, std::vector<int> selectedIDs)
+void Game::ObjectScaling(bool scaleUpOrDown, InputCommands::ScaleDirection scaleDirection, std::vector<int> selectedIDs)
 {
-	if (ObjectScalingMode)
+	if (m_bObjectScalingMode)
 	{
-		Vector3 objectScaleTemp;
-		Vector3 scaleParam = Vector3(0.1, 0.1, 0.1);
+		Vector3 objectScaleTemp;//Create temporary vector to hold the current selected objects scale
+		Vector3 scaleParam = Vector3(0.1, 0.1, 0.1);//Used increase or decrease the scale by this amount
 		for (auto& element : selectedIDs)
 		{
 			objectScaleTemp = m_displayList[element].m_scale;
 
-			if (scaleUpOrDown)
-			{
-				//m_displayList[element].m_scale = XMVectorAdd(m_displayList[element].m_scale, scaleParam);
+			if (scaleUpOrDown)//True - scale up, False - scale down
 				objectScaleTemp = XMVectorAdd(objectScaleTemp, scaleParam);
-			}
 			else
-			{
-				//m_displayList[element].m_scale = XMVectorSubtract(m_displayList[element].m_scale, scaleParam);
 				objectScaleTemp = XMVectorSubtract(objectScaleTemp, scaleParam);
-			}
 
-			switch (scaleDirection)
+			switch (scaleDirection)//Adds changed scale back to the selected object
 			{
 			case InputCommands::Whole:
 				m_displayList[element].m_scale = objectScaleTemp;
@@ -790,9 +781,7 @@ void Game::ScaleUPAndDown(bool scaleUpOrDown, InputCommands::ScaleDirection scal
 void Game::ObjectWireframe(std::vector<int> selectedIDs)
 {
 	for (auto element : selectedIDs)
-	{
 		m_displayList[element].m_wireframe = !m_displayList[element].m_wireframe;
-	}
 }
 
 #ifdef DXTK_AUDIO
