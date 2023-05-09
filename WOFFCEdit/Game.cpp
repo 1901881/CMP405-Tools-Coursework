@@ -147,73 +147,6 @@ void Game::Update(DX::StepTimer const& timer)
 
 	//apply camera vectors
 	m_view = m_camera.GetViewMatrix();
-
-	/*
-	//TODO  any more complex than this, and the camera should be abstracted out to somewhere else
-	//camera motion is on a plane, so kill the 7 component of the look direction
-	Vector3 planarMotionVector = m_camLookDirection;
-	planarMotionVector.y = 0.0;
-
-	if (m_InputCommands.rotRight)
-	{
-		m_camOrientation.y -= m_camRotRate;
-	}
-	if (m_InputCommands.rotLeft)
-	{
-		m_camOrientation.y += m_camRotRate;
-	}
-	if (m_InputCommands.rotUp)
-	{
-		m_camOrientation.x += m_camRotRate;
-	}
-	if (m_InputCommands.rotDown)
-	{
-		m_camOrientation.x -= m_camRotRate;
-	}
-
-	//create look direction from Euler angles in m_camOrientationf
-	m_camLookDirection.x = sin((m_camOrientation.y)*3.1415 / 180);
-	m_camLookDirection.z = cos((m_camOrientation.y)*3.1415 / 180);
-	m_camLookDirection.y = tan((m_camOrientation.x)*3.1415 / 180);
-	m_camLookDirection.Normalize();
-
-	//create right vector from look Direction
-	m_camLookDirection.Cross(Vector3::UnitY, m_camRight);
-
-	//process input and update stuff
-	if (m_InputCommands.forward)
-	{	
-		m_camPosition += m_camLookDirection*m_movespeed;
-	}
-	if (m_InputCommands.back)
-	{
-		m_camPosition -= m_camLookDirection*m_movespeed;
-	}
-	if (m_InputCommands.right)
-	{
-		m_camPosition += m_camRight*m_movespeed;
-	}
-	if (m_InputCommands.left)
-	{
-		m_camPosition -= m_camRight*m_movespeed;
-	}
-
-	if (m_InputCommands.up)
-	{
-		m_camPosition.y += m_movespeed;
-	}
-	if (m_InputCommands.down)
-	{
-		m_camPosition.y -= m_movespeed;
-	}
-
-	//update lookat point
-	m_camLookAt = m_camPosition + m_camLookDirection;
-
-	//apply camera vectors
-    m_view = Matrix::CreateLookAt(m_camPosition, m_camLookAt, Vector3::UnitY);
-	*/
-
     m_batchEffect->SetView(m_view);
     m_batchEffect->SetWorld(Matrix::Identity);
 	m_displayChunk.m_terrainEffect->SetView(m_view);
@@ -642,34 +575,6 @@ std::vector<int> Game::MousePicking()
 
 }
 
-std::vector<int> Game::MultiSelectAdd(int selectedID)
-{
-	//get id
-	//loop through vector
-	//if id isnt in 
-	//add to it
-	//multiSelect.contains
-
-	//on first multiselect add clear
-
-	if (std::find(multiSelect.begin(), multiSelect.end(), selectedID) != multiSelect.end()) {}//does contain
-	else { //does not contain
-
-		multiSelect.push_back(selectedID);
-	}
-
-	return multiSelect;
-
-}
-
-void Game::Arcball(int selectedObjectID)
-{
-	//m_displayList[selectedObjectID];
-
-}
-
-
-
 void Game::PasteObject(std::vector<int> copiedIDs)
 {
 	auto device = m_deviceResources->GetD3DDevice();
@@ -761,35 +666,33 @@ void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection m
 
 			switch (moveDirection)
 			{
-			case InputCommands::Forward:
-				tempPos -= m_camera.GetLookAt() * moveSpeed;
-				tempPos.y = objectInitialYPosition;
-				m_displayList[element].m_position = tempPos;
-				break;
-			case InputCommands::Backward:
-				tempPos += m_camera.GetLookAt() * moveSpeed;
-				tempPos.y = objectInitialYPosition;
-				m_displayList[element].m_position = tempPos;
-				break;
-			case InputCommands::Right:
-				tempPos += m_camera.GetRightVector() * moveSpeed;
-				tempPos.y = objectInitialYPosition;
-				m_displayList[element].m_position = tempPos;
-				break;
-			case InputCommands::Left:
-				tempPos -= m_camera.GetRightVector() * moveSpeed;
-				tempPos.y = objectInitialYPosition;
-				m_displayList[element].m_position = tempPos;
-				break;
-			case InputCommands::Up:
-				m_displayList[element].m_position.y += moveSpeed;
-				break;
-			case InputCommands::Down:
-				m_displayList[element].m_position.y -= moveSpeed;
-				break;
-			default:
-				break;
+				case InputCommands::Forward:
+					tempPos -= m_camera.GetLookAt() * moveSpeed;
+					tempPos.y = objectInitialYPosition;
+					break;
+				case InputCommands::Backward:
+					tempPos += m_camera.GetLookAt() * moveSpeed;
+					tempPos.y = objectInitialYPosition;
+					break;
+				case InputCommands::Right:
+					tempPos += m_camera.GetRightVector() * moveSpeed;
+					tempPos.y = objectInitialYPosition;
+					break;
+				case InputCommands::Left:
+					tempPos -= m_camera.GetRightVector() * moveSpeed;
+					tempPos.y = objectInitialYPosition;
+					break;
+				case InputCommands::Up:
+					tempPos.y += moveSpeed;
+					break;
+				case InputCommands::Down:
+					tempPos.y -= moveSpeed;
+					break;
+				default:
+					break;
 			}
+
+			m_displayList[element].m_position = tempPos;
 		}
 	}
 }

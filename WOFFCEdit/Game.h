@@ -62,7 +62,6 @@ public:
 	bool multiSelectActive = false;
 
 	void Arcball(int selectedObjectID);
-	std::vector<int> MultiSelectAdd(int selectedID);
 	void PasteObject(std::vector<int> copiedIDs);
 	void ScaleUPAndDown(bool scaleUpOrDown, InputCommands::ScaleDirection scaleDirection, std::vector<int> selectedIDs);
 	void MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
