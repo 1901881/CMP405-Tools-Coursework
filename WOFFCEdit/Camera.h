@@ -11,12 +11,14 @@ class Camera
 public:
 
 	void Update(const InputCommands& inputCommands);
-	void Arcball(const InputCommands& m_InputCommands, float viewportWidth, float viewportHeight);
-	void ObjectFocus(Vector3 m_selectedObjectPos);
 
+	/**
+	* @brief Uses selected objects position to move camera towards it
+	* @param m_selectedObjectPos  - selected object position
+	*/
+	void ObjectFocus(Vector3 m_selectedObjectPos);
 	
 	Matrix GetViewMatrix() const;
-	
 	Vector3 GetPosition() const;
 	Vector3 GetOrientation() const;
 	Vector3 GetLookAt() const;

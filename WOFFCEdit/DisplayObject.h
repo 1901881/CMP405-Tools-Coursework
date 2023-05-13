@@ -8,6 +8,10 @@ public:
 	DisplayObject();
 	~DisplayObject();
 
+	/**
+	* @brief Updates objects fog effect, ebables and disables it with parameter
+	* @param highlightState  - true = highlight enabled, false = highlight disabled
+	*/
 	void ObjectHighlight(bool highlightState);
 
 	std::shared_ptr<DirectX::Model>						m_model;							//main Mesh

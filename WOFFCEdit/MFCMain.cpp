@@ -74,37 +74,22 @@ int MFCMain::Run()
 		}
 		else
 		{	
-			//int ID = m_ToolSystem.getCurrentSelectionID();
-			//std::wstring statusString = L"Selected Object: " + std::to_wstring(ID);
-			//m_ToolSystem.Tick(&msg);
-
-			////send current object ID to status bar in The main frame
-			//m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);	
-
-			//get current selection id needs to return the multiselect vector
-			//how to put as string
-			//https://stackoverflow.com/questions/2518979/how-to-transform-a-vectorint-into-a-string
-		https://hashnode.com/post/converting-stdstring-to-stdwstring-cka1q0zj5020fbls1ml34841w
-
-			std::vector<int> multiSelectID = m_ToolSystem.getMultiSelectionIDs();//now make this function
-			/*multiSelect.push_back(1);
-			multiSelect.push_back(2);*/
+			std::vector<int> multiSelectID = m_ToolSystem.getMultiSelectionIDs();
 
 			//if multiselect contains anything play
 			if (!multiSelectID.empty())
 			{
+				//convert selected IDs to string
 				std::stringstream result;
 				std::copy(multiSelectID.begin(), multiSelectID.end(), std::ostream_iterator<int>(result, ", "));
-				//result.str().erase(result.str().end(), result.str().end()-1);
 				std::wstring wideString =
 					std::wstring_convert<std::codecvt_utf8<wchar_t>>().from_bytes(result.str());
-				wideString.erase(wideString.size() - 2);
+				wideString.erase(wideString.size() - 2);//remove last comma
 
 				std::wstring statusString = L"Selected Objects: " + wideString;
-				//statusString.erase(1);
 				
 
-				//send current object ID to status bar in The main frame
+				//send selected object IDs to status bar in The main frame
 				m_frame->m_wndStatusBar.SetPaneText(1, statusString.c_str(), 1);
 			}
 

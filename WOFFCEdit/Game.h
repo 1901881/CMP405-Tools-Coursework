@@ -55,11 +55,7 @@ public:
 	void SaveDisplayChunk(ChunkObject *SceneChunk);	//saves geometry et al
 	void ClearDisplayList();
 
-	//lab 6
 	std::vector<int> MousePicking();
-	RECT m_ScreenDimensions;
-	std::vector<int> multiSelect;
-	
 
 	/**
 	 * @brief Paste copied objects - Iterate through copied objects creating a new object with the copied objects values and add to the display list
@@ -75,14 +71,25 @@ public:
 	 */
 	void ObjectScaling(bool scaleUpOrDown, InputCommands::ScaleDirection scaleDirection, std::vector<int> selectedIDs);
 	
-	void MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
+	/**
+	 * @brief Iterates through selected objects and adds or subtracts their position in the set direction
+	 * @param selectedIDs  - contains the the IDs of the selected objects
+	 * @param moveDirection  - controls the axis in which the object is moved
+	 */
+	void MoveObject(std::vector<int> selectedIDs, InputCommands::MoveDirection moveDirection);
 	
-	void RotateObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection);
+	/**
+	 * @brief Iterates through selected objects and adds or subtracts their orientaion in the set direction
+	 * @param selectedIDs  - contains the the IDs of the selected objects
+	 * @param moveDirection  - controls the axis in which the object is rotated
+	 */
+	void RotateObject(std::vector<int> selectedIDs, InputCommands::MoveDirection moveDirection);
 	
-	
+	/**
+	* @brief Iterates through display objects and turns off their highlight then turns the highlight on for the selected objects 
+	* @param selectedIDs  - contains the the IDs of the selected objects
+	*/
 	void ObjectHighlightUpdate(std::vector<int> selectedIDs);
-
-	
 
 	 /**
 	 * @brief Iterates through selected objects and turns on or off their wireframe mode
@@ -124,17 +131,6 @@ private:
 	std::vector<DisplayObject>			m_displayList;
 	DisplayChunk						m_displayChunk;
 	InputCommands						m_InputCommands;
-
-	//functionality
-	float								m_movespeed;
-
-	//camera
-	DirectX::SimpleMath::Vector3		m_camPosition;
-	DirectX::SimpleMath::Vector3		m_camOrientation;
-	DirectX::SimpleMath::Vector3		m_camLookAt;
-	DirectX::SimpleMath::Vector3		m_camLookDirection;
-	DirectX::SimpleMath::Vector3		m_camRight;
-	float m_camRotRate;
 
 	//control variables
 	bool m_grid;							//grid rendering on / off
@@ -182,12 +178,13 @@ private:
     DirectX::SimpleMath::Matrix                                             m_view;
     DirectX::SimpleMath::Matrix                                             m_projection;
 
-	Camera m_camera;
+	Camera m_camera;//used to access the camera
+	RECT m_ScreenDimensions;//used for mousepicking raytrace
+	std::vector<int> multiSelect;//stores object id from mousepicking
 
 	int selectCounter = 0;
 	int previousSelectedID = 0;
 	
-
 	bool m_bIsTerrainWireframe = false;//Controls the terrain wireframe mode
 	bool m_bAltDown = false;//Retrieves key data from tool main
 	bool m_bObjectMovementMode = false;//If true object can be moved

@@ -23,12 +23,12 @@ public: //methods
 	void	onActionLoad();													//load the current chunk
 	afx_msg	void	onActionSave();											//save the current chunk
 	afx_msg void	onActionSaveTerrain();									//save chunk geometry
-	void ObjectMovementMode();
-	void ObjectRotationMode();
-	void ObjectScalingMode();
+	void ObjectMovementMode();												//Allow object to be moved
+	void ObjectRotationMode();												//Allow object to be rotated
+	void ObjectScalingMode();												//Allow object to be scaled
 
-	void TerrainWireframe();
-	void ObjectWireframe();
+	void TerrainWireframe();												//Set terrain to wireframe mode
+	void ObjectWireframe();													//Set selected objects to wireframe mode
 
 	void	Tick(MSG *msg);
 	void	UpdateInput(MSG *msg);
@@ -37,7 +37,7 @@ public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
 	ChunkObject					m_chunk;		//our landscape chunk
 	int m_selectedObject;	
-	std::vector<int> m_multiSelectIDs; //IDs of current Selection
+	std::vector<int> m_multiSelectIDs;							//IDs of current Selection
 	std::vector<int> m_copiedIDs;								//ID of copied Selection
 	bool m_pastePlayedOnce = false;	
 	bool m_scrollPlayedOnce = false;	

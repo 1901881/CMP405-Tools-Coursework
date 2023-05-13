@@ -5,6 +5,7 @@ using namespace DirectX;
 
 void Camera::Update(const InputCommands& m_InputCommands)
 {
+	//camera rotation input
 	if (m_InputCommands.rotRight)
 	{
 		m_camOrientation.y -= m_camRotRate;
@@ -41,11 +42,11 @@ void Camera::Update(const InputCommands& m_InputCommands)
 	m_forward.z = cosP * cosY;
 	m_forward.Normalize();
 
-	//create right vector from look Directio
+	//create right vector from look direction
 	m_forward.Cross(Vector3::UnitY, m_rightVector);
 	m_rightVector.Normalize();
 
-	//process input and update stuff
+	//camera movement input
 	if (m_InputCommands.forward)
 	{
 		m_camPosition += m_forward * m_moveSpeed;
@@ -71,48 +72,9 @@ void Camera::Update(const InputCommands& m_InputCommands)
 		m_camPosition.y -= m_moveSpeed;
 	}
 
-	//update lookat point
-	m_lookAt = m_camPosition + m_forward;
+	m_lookAt = m_camPosition + m_forward;//update lookat
 }
 
-void Camera::Arcball(const InputCommands& m_InputCommands, float viewportWidth, float viewportHeight)
-{
-	float lastMousePosX;
-	float lastMousePosY;
-	bool firstClick = false;
-
-	if (firstClick)
-	{
-		lastMousePosX = m_InputCommands.mouse_X;
-		lastMousePosY = m_InputCommands.mouse_Y;
-	}
-	//Vector3 camPosition;
-	//Vector3 camPosition;
-
-	
-
-	Vector3 pivot;//object selected position
-
-	float PI = 3.142f;
-
-	// step 1 : Calculate the amount of rotation given the mouse movement.
-	float deltaAngleX = (2 * PI / viewportWidth); // a movement from left to right = 2*PI = 360 deg
-	float deltaAngleY = (PI / viewportHeight);  // a movement from top to bottom = PI = 180 deg
-	float xAngle = (lastMousePosX - m_InputCommands.mouse_X) * deltaAngleX;
-	float yAngle = (lastMousePosY - m_InputCommands.mouse_Y) * deltaAngleY;
-
-	// Extra step to handle the problem when the camera direction is the same as the up vector
-	float cosAngle = m_forward.Dot(m_upVector);
-	if (cosAngle * sinf(deltaAngleY) > 0.99f)
-		deltaAngleY = 0;
-
-	// step 2: Rotate the camera around the pivot point on the first axis.
-	//Matrix rotationMatrixX;
-	//rotationMatrixX = Matrix::CreateRotationX(xAngle, m_upVector);
-	//
-	//
-	//m_camPosition = (rotationMatrixX * (m_camPosition - pivot)) + pivot;
-}
 
 //Move camera to selected object
 void Camera::ObjectFocus(Vector3 m_selectedObjectPos)

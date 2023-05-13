@@ -23,37 +23,6 @@ Game::Game()
 	//initial Settings
 	//modes
 	m_grid = false;
-
-	//functional
-	m_movespeed = 0.30;
-	m_camRotRate = 3.0;
-
-	//delete?
-	//camera
-	//m_camPosition.x = 0.0f;
-	//m_camPosition.y = 3.7f;
-	//m_camPosition.z = -3.5f;
-
-	//m_camOrientation.x = 0;
-	//m_camOrientation.y = 0;
-	//m_camOrientation.z = 0;
-
-	//m_camLookAt.x = 0.0f;
-	//m_camLookAt.y = 0.0f;
-	//m_camLookAt.z = 0.0f;
-
-	//m_camLookDirection.x = 0.0f;
-	//m_camLookDirection.y = 0.0f;
-	//m_camLookDirection.z = 0.0f;
-
-	//m_camRight.x = 0.0f;
-	//m_camRight.y = 0.0f;
-	//m_camRight.z = 0.0f;
-
-	//m_camOrientation.x = 0.0f;
-	//m_camOrientation.y = 0.0f;
-	//m_camOrientation.z = 0.0f;
-
 }
 
 Game::~Game()
@@ -432,10 +401,7 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 
 		m_displayList.push_back(newDisplayObject);
 		
-	}
-		
-		
-		
+	}	
 }
 
 void Game::BuildDisplayChunk(ChunkObject * SceneChunk)
@@ -523,7 +489,6 @@ std::vector<int> Game::MousePicking()
 					multiSelect = temp;
 				}
 				
-
 			}//does contain
 			else { //does not contain
 				multiSelect.push_back(multiSelect.front());
@@ -553,9 +518,9 @@ std::vector<int> Game::MousePicking()
 				multiSelect.front() = selectedID;
 		}
 
-		//If a object is selected
 		ObjectHighlightUpdate(multiSelect);
 
+		//Used for object focus double click
 		if (selectedID == previousSelectedID)
 			selectCounter++;
 		else
@@ -567,7 +532,6 @@ std::vector<int> Game::MousePicking()
 			m_camera.ObjectFocus(m_displayList[selectedID].m_position);
 			selectCounter = 0;
 		}
-
 
 		previousSelectedID = selectedID;
 	}
@@ -631,7 +595,6 @@ void Game::PasteObject(std::vector<int> copiedIDs)
 		//set wireframe / render flags
 		newDisplayObject.m_render = m_displayList[element].m_render;
 		newDisplayObject.m_wireframe = m_displayList[element].m_wireframe;
-		//newDisplayObject.m_wireframe = true;
 
 		newDisplayObject.m_light_type = m_displayList[element].m_light_type;
 		newDisplayObject.m_light_diffuse_r = m_displayList[element].m_light_diffuse_r;
@@ -651,11 +614,11 @@ void Game::PasteObject(std::vector<int> copiedIDs)
 
 }
 
-void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection)
+void Game::MoveObject(std::vector<int> selectedIDs, InputCommands::MoveDirection moveDirection)
 {
 	if (m_bObjectMovementMode)
 	{
-		for (auto& element : copiedIDs)
+		for (auto& element : selectedIDs)
 		{
 			Vector3 tempPos = m_displayList[element].m_position;
 			float objectInitialYPosition = m_displayList[element].m_position.y;
@@ -694,31 +657,26 @@ void Game::MoveObject(std::vector<int> copiedIDs, InputCommands::MoveDirection m
 	}
 }
 
-void Game::RotateObject(std::vector<int> copiedIDs, InputCommands::MoveDirection moveDirection)
+void Game::RotateObject(std::vector<int> selectedIDs, InputCommands::MoveDirection moveDirection)
 {
 	if (m_bObjectRotationMode)
 	{
-		for (auto& element : copiedIDs)
+		for (auto& element : selectedIDs)
 		{
-			float moveSpeed = 1;
+			float moveSpeed = 10;
 			switch (moveDirection)
 			{
 			case InputCommands::RotDown:
-				//how would i make it move in the cameras direction
-				//m_camOrientation.x -= m_camRotRate;
-				//m_displayList[element].m_orientation.x += m_camera.GetLookAt().x * moveSpeed;
-				m_displayList[element].m_orientation.x += moveSpeed * 10;
-				break;
-			case InputCommands::RotUp:
-				m_displayList[element].m_orientation.x -= moveSpeed * 10;
-				break;
-			case InputCommands::RotLeft:
-				//m_displayList[element].m_orientation.y -= m_camera.GetOrientation().x * moveSpeed;
-				m_displayList[element].m_orientation.y += moveSpeed * 10;
-				break;
-			case InputCommands::RotRight:
-				//m_displayList[element].m_orientation.y += m_camera.GetOrientation().x * moveSpeed;
-				m_displayList[element].m_orientation.y -= moveSpeed * 10;
+				m_displayList[element].m_orientation.x += moveSpeed;
+				break;											   
+			case InputCommands::RotUp:							   
+				m_displayList[element].m_orientation.x -= moveSpeed;
+				break;											   
+			case InputCommands::RotLeft:						   
+				m_displayList[element].m_orientation.y += moveSpeed;
+				break;											   
+			case InputCommands::RotRight:						   
+				m_displayList[element].m_orientation.y -= moveSpeed;
 				break;
 			default:
 				break;

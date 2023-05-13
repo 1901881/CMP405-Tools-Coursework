@@ -370,21 +370,9 @@ void ToolMain::Tick(MSG *msg)
 
 	//multiselect
 	if (m_toolInputCommands.multiSelect)
-	{
 		m_d3dRenderer.setM_bMultiSelectActive(true);
-	}
 	else if (!m_toolInputCommands.multiSelect)
-	{
 		m_d3dRenderer.setM_bMultiSelectActive(false);
-	}
-
-	//arcball
-	if (m_toolInputCommands.mouse_RB_Down)
-	{
-		//m_d3dRenderer.Arcball(m_multiSelectIDs.front());
-		/*m_toolInputCommands.mouse_X
-		m_toolInputCommands.mouse_Y*/
-	}
 
 	//Copy and Paste
 	if (m_toolInputCommands.ctrl_Down && m_toolInputCommands.c_Down)
@@ -398,8 +386,6 @@ void ToolMain::Tick(MSG *msg)
 		if (!m_pastePlayedOnce)
 		{
 			m_d3dRenderer.PasteObject(m_copiedIDs);
-				
-
 			m_pastePlayedOnce = true;
 		}
 	}
@@ -423,7 +409,7 @@ void ToolMain::Tick(MSG *msg)
 		}
 	}
 
-	//Object Movement
+	//Object Movement + Rotation
 	if (m_toolInputCommands.i_Down)
 	{
 		m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::Forward);
@@ -459,28 +445,7 @@ void ToolMain::Tick(MSG *msg)
 		m_toolInputCommands.u_Down = false;
 	}
 
-	//Object Rotation
-	//if (m_toolInputCommands.numPad8_Down)
-	//{
-	//	m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotDown);
-	//	m_toolInputCommands.numPad8_Down = false;
-	//}
-	//if (m_toolInputCommands.numPad4_Down)
-	//{
-	//	m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotLeft);
-	//	m_toolInputCommands.numPad4_Down = false;
-	//}
-	//if (m_toolInputCommands.numPad2_Down)
-	//{
-	//	m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotUp);
-	//	m_toolInputCommands.numPad2_Down = false;
-	//}
-	//if (m_toolInputCommands.numPad6_Down)
-	//{
-	//	m_d3dRenderer.MoveObject(m_multiSelectIDs, InputCommands::RotRight);
-	//	m_toolInputCommands.numPad6_Down = false;
-	//}
-
+	//Deselect
 	if (m_toolInputCommands.alt_Down)
 		m_d3dRenderer.setM_bAltDown(true);
 	else
@@ -514,18 +479,7 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.mouse_LB_Down = true;
 		break;
 
-	case WM_RBUTTONDOWN:	//mouse button down,  you will probably need to check when its up too
-		//set some flag for the mouse button in inputcommands
-		//mouse right pressed.	
-		m_toolInputCommands.mouse_RB_Down = true;
-		break;
-
-	case WM_RBUTTONUP:	//mouse button down,  you will probably need to check when its up too
-		//set some flag for the mouse button in inputcommands
-		//mouse right unpressed.	
-		m_toolInputCommands.mouse_RB_Down = false;
-		break;
-
+		//Get mouse wheel delta >0 = up scroll, <0 = down scroll
 	case WM_MOUSEWHEEL:
 		if (GET_WHEEL_DELTA_WPARAM(msg->wParam) > 0)
 		{
@@ -564,17 +518,6 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.right = true;
 	}
 	else m_toolInputCommands.right = false;
-	//rotation
-	/*if (m_keyArray['E'])
-	{
-		m_toolInputCommands.rotRight = true;
-	}
-	else m_toolInputCommands.rotRight = false;
-	if (m_keyArray['Q'])
-	{
-		m_toolInputCommands.rotLeft = true;
-	}
-	else m_toolInputCommands.rotLeft = false;*/
 
 	//Movement Up and Down
 	if (m_keyArray['E'])
@@ -597,25 +540,24 @@ void ToolMain::UpdateInput(MSG * msg)
 	//down arrow - 40
 
 	if (m_keyArray[38])
-	{
 		m_toolInputCommands.rotUp = true;
-	}
-	else m_toolInputCommands.rotUp = false;
+	else 
+		m_toolInputCommands.rotUp = false;
+
 	if (m_keyArray[40])
-	{
 		m_toolInputCommands.rotDown = true;
-	}
-	else m_toolInputCommands.rotDown = false;
+	else 
+		m_toolInputCommands.rotDown = false;
+
 	if (m_keyArray[39])
-	{
 		m_toolInputCommands.rotRight = true;
-	}
-	else m_toolInputCommands.rotRight = false;
+	else 
+		m_toolInputCommands.rotRight = false;
+
 	if (m_keyArray[37])
-	{
 		m_toolInputCommands.rotLeft = true;
-	}
-	else m_toolInputCommands.rotLeft = false;
+	else 
+		m_toolInputCommands.rotLeft = false;
 
 	if (m_keyArray[17])
 	{
@@ -628,7 +570,7 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_toolInputCommands.ctrl_Down = false;
 	}
 	
-
+	//Copy and paste
 	if (m_keyArray[67])
 	{
 		m_toolInputCommands.c_Down = true;
@@ -645,8 +587,8 @@ void ToolMain::UpdateInput(MSG * msg)
 		m_pastePlayedOnce = false;
 	}
 
-	
-	/// ///////////////////////////////////////////////////////
+
+	//Object movement
 	//IJKL
 	if (m_keyArray[73])
 	{
@@ -677,57 +619,23 @@ void ToolMain::UpdateInput(MSG * msg)
 		scaleDirection = InputCommands::Z;
 	}
 	else m_toolInputCommands.l_Down = false;
-
 	
 
 	// UO
 	if (m_keyArray[85])
-	{
 		m_toolInputCommands.u_Down = true;
-	}
-	else m_toolInputCommands.u_Down = false;
+	else 
+		m_toolInputCommands.u_Down = false;
 
 	if (m_keyArray[79])
-	{
 		m_toolInputCommands.o_Down = true;
-	}
-	else m_toolInputCommands.o_Down = false;
+	else 
+		m_toolInputCommands.o_Down = false;
 
-	//Numpad
-	//8 - 104
-	//4 - 100
-	//2 - 98
-	//6 - 102
-	if (m_keyArray[104])
-	{
-		m_toolInputCommands.numPad8_Down = true;
-	}
-	else m_toolInputCommands.numPad8_Down = false;
-
-	if (m_keyArray[100])
-	{
-		m_toolInputCommands.numPad4_Down = true;
-	}
-	else m_toolInputCommands.numPad4_Down = false;
-
-	if (m_keyArray[98])
-	{
-		m_toolInputCommands.numPad2_Down = true;
-	}
-	else m_toolInputCommands.numPad2_Down = false;
-
-	if (m_keyArray[102])
-	{
-		m_toolInputCommands.numPad6_Down = true;
-	}
-	else m_toolInputCommands.numPad6_Down = false;
-
+	//object de select
 	if (m_keyArray[18])
-	{
 		m_toolInputCommands.alt_Down = true;
-	}
-	else m_toolInputCommands.alt_Down = false;
-
-	//https://css-tricks.com/snippets/javascript/javascript-keycodes/
+	else 
+		m_toolInputCommands.alt_Down = false;
 
 }
